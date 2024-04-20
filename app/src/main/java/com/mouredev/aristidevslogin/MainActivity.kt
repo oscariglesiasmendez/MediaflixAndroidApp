@@ -9,10 +9,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mouredev.aristidevslogin.ui.login.ui.LoginScreen
+import com.mouredev.aristidevslogin.ui.login.screen.LoginScreen
 import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
-import com.mouredev.aristidevslogin.ui.login.ui.SignupScreen
-import com.mouredev.aristidevslogin.ui.login.ui.WelcomeScreen
+import com.mouredev.aristidevslogin.ui.signup.screen.SignupScreen
+import com.mouredev.aristidevslogin.ui.signup.ui.SignUpViewModel
+import com.mouredev.aristidevslogin.ui.welcome.WelcomeScreen
 import com.mouredev.aristidevslogin.ui.theme.AristiDevsLoginTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,19 +31,14 @@ class MainActivity : ComponentActivity() {
 fun NavigationView() {
 
     val navController = rememberNavController()
-    val viewModel =  LoginViewModel()
+    val loginViewModel =  LoginViewModel()
+    val signUpViewModel = SignUpViewModel()
 
     NavHost(navController = navController, startDestination = "welcome" ){
         // also pass navController to each screen so we can use navController in there
         composable("welcome"){ WelcomeScreen(navController) }
-        composable("login"){ LoginScreen(viewModel, navController) }
-        composable("signup"){ SignupScreen(navController) }
+        composable("login"){ LoginScreen(loginViewModel, navController) }
+        composable("signup"){ SignupScreen(signUpViewModel, navController) }
     }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
 
 }

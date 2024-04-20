@@ -1,4 +1,4 @@
-package com.mouredev.aristidevslogin.ui.login.ui
+package com.mouredev.aristidevslogin.ui.login.screen
 
 import android.content.Context
 import android.util.Log
@@ -41,6 +41,8 @@ import com.mouredev.aristidevslogin.ui.theme.AlegreyaFontFamily
 import com.mouredev.aristidevslogin.ui.theme.AlegreyaSansFontFamily
 import kotlinx.coroutines.launch
 import com.mouredev.aristidevslogin.R
+import com.mouredev.aristidevslogin.ui.login.ui.LoginData
+import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
 
 const val TAG_LOG: String = "LoginScreen"
 
@@ -114,8 +116,7 @@ fun Login(
     loginEnable: Boolean,
     isLoading: Boolean,
     loginMessage: String,
-    navController:
-    NavHostController
+    navController: NavHostController
 ) {
     val coroutineScope = rememberCoroutineScope()
     val mContext = LocalContext.current
