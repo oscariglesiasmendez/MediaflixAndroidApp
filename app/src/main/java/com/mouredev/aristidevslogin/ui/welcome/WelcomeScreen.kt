@@ -24,21 +24,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.jetpackcomposeauthui.components.CButton
-import com.example.jetpackcomposeauthui.components.DontHaveAccountRow
 import com.mouredev.aristidevslogin.ui.theme.AlegreyaFontFamily
 import com.mouredev.aristidevslogin.R
+import com.mouredev.aristidevslogin.components.CButton
+import com.mouredev.aristidevslogin.components.DontHaveAccountRow
 import com.mouredev.aristidevslogin.ui.theme.AlegreyaSansFontFamily
 
 
 @Composable
 fun WelcomeScreen(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    onLoginClick: () -> Unit,
+    onSignUpClick: () -> Unit
 ) {
 
     Box(
-        modifier = modifier.fillMaxSize().background(Color(204,173,228))
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(204, 173, 228))
     ) {
 
         Column(
@@ -81,17 +83,12 @@ fun WelcomeScreen(
 
 
             CButton(text = "Inicia sesión con Email",
-                onClick = {
-                    navController.navigate("login")
-                }
-                )
-
-            DontHaveAccountRow(
-                onSignupTap = {
-                    navController.navigate("signup")
-                }
+                onClick = onLoginClick
             )
 
+            DontHaveAccountRow(
+                onSignupTap = onSignUpClick
+            )
 
 
         }
@@ -103,5 +100,5 @@ fun WelcomeScreen(
 @Preview(showBackground = true, widthDp = 320, heightDp = 640)
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen(rememberNavController())
+    WelcomeScreen({},{})
 }

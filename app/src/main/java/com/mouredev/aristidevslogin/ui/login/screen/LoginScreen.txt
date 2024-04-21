@@ -1,7 +1,9 @@
 package com.mouredev.aristidevslogin.ui.login.screen
 
-
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.mouredev.aristidevslogin.ui.theme.AlegreyaFontFamily
 import com.mouredev.aristidevslogin.ui.theme.AlegreyaSansFontFamily
 import com.mouredev.aristidevslogin.R
@@ -29,13 +32,34 @@ import com.mouredev.aristidevslogin.components.CTextField
 import com.mouredev.aristidevslogin.components.DontHaveAccountRow
 import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
 import com.mouredev.aristidevslogin.ui.login.ui.LoginFormEvent
+import com.mouredev.aristidevslogin.ui.login.ui.LoginFormState
 
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    onLoginClick: () -> Unit,
-    onSignUpClick: () -> Unit
+    navController: NavHostController,
+) {
+
+    Login(
+        viewModel,
+        viewModel.state,
+        navController,
+    )
+
+}
+
+// Function to generate a Toast
+private fun mToast(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+}
+
+
+@Composable
+fun Login(
+    viewModel: LoginViewModel,
+    loginData: LoginFormState,
+    navController: NavHostController
 ) {
 
     var passwordVisible by remember { mutableStateOf(false) }
@@ -94,8 +118,8 @@ fun LoginScreen(
                     onValueChange = {
                         viewModel.onEvent(LoginFormEvent.EmailChanged(it))
                     },
-                    value = viewModel.state.email,
-                    errorMessage = viewModel.state.emailError
+                    value = loginData.email,
+                    errorMessage = loginData.emailError
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -103,9 +127,9 @@ fun LoginScreen(
                 // Password
                 CPasswordTextField(
                     hint = "Contraseña",
-                    value = viewModel.state.password,
+                    value = loginData.password,
                     onValueChange = { viewModel.onEvent(LoginFormEvent.PasswordChanged(it)) },
-                    errorMessage = viewModel.state.passwordError,
+                    errorMessage = loginData.passwordError,
                     passwordVisible = passwordVisible,
                     passwordVisibleChange = { passwordVisible = !passwordVisible },
                 )
@@ -114,26 +138,61 @@ fun LoginScreen(
 
                 // Botón login
                 CButton(
-                    onClick = {
-                        // Trigger LoginFormEvent.Submit first
-                        viewModel.onEvent(LoginFormEvent.Submit)
-
-                        // Sólo si los datos son válidos avanzo a la siguiente pantalla
-                        if(viewModel.submitData()) {
-                            // Then trigger onLoginClick
-                            onLoginClick()
-                        }
-                    },
+                    { viewModel.onEvent(LoginFormEvent.Submit) },
                     text = "Iniciar Sesión"
                 )
 
-                DontHaveAccountRow(onSignUpClick)
+                DontHaveAccountRow(
+                    onSignupTap = {
+                        navController.navigate("signup")
+                    }
+                )
             }
         }
     }
+
+}
+
+/*
+@Composable
+fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit) {
+    Button(
+        onClick = {
+            Log.d(TAG_LOG, "Onclick")
+            onLoginSelected()
+        }, modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp), colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            disabledContentColor = Color.White,
+        ), enabled = loginEnable
+    ) {
+        Text(text = "Iniciar sesion")
+    }
+
+}
+*/
+
+@Composable
+fun ForgotPassword(modifier: Modifier) {
+    Text(
+        text = "Olvidaste la contraseña?",
+        modifier = modifier.clickable { },
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color(0xFFFB9600)
+    )
 }
 
 
+@Composable
+fun HeaderImage(modifier: Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.logo),
+        contentDescription = "Header",
+        modifier = modifier
+    )
+}
 
 
 

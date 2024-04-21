@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">AristiDevsLogin</string>
+    <string name="app_name">MediaflixApp</string>
+
+    <string name="emailBlanco">"El email no puede estar vacío"</string>
+    <string name="emailBlank">The email can\'t be blank</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.example.jetpackcomposeauthui.components
+package com.mouredev.aristidevslogin.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

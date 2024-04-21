@@ -1,4 +1,4 @@
-package com.example.jetpackcomposeauthui.components
+package com.mouredev.aristidevslogin.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +18,7 @@ import com.mouredev.aristidevslogin.ui.theme.AlegreyaSansFontFamily
 @Composable
 fun CButton(
     onClick: () -> Unit = {},
-    text: String,
+    text: String
 ) {
 
     //Esta clase la hago para hacer un botón reutilizable
@@ -26,7 +26,7 @@ fun CButton(
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(35,7,59)
+            containerColor = Color(35, 7, 59)
         ),
         modifier = Modifier
             .fillMaxWidth()

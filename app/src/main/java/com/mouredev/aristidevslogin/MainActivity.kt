@@ -3,17 +3,7 @@ package com.mouredev.aristidevslogin
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mouredev.aristidevslogin.ui.login.screen.LoginScreen
-import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
-import com.mouredev.aristidevslogin.ui.signup.screen.SignupScreen
-import com.mouredev.aristidevslogin.ui.signup.ui.SignUpViewModel
-import com.mouredev.aristidevslogin.ui.welcome.WelcomeScreen
 import com.mouredev.aristidevslogin.ui.theme.AristiDevsLoginTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,12 +11,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AristiDevsLoginTheme {
-                NavigationView()
+                val navController = rememberNavController()
+                Navigation(navController)
             }
         }
     }
 }
 
+/*
 @Composable
 fun NavigationView() {
 
@@ -41,4 +33,4 @@ fun NavigationView() {
         composable("signup"){ SignupScreen(signUpViewModel, navController) }
     }
 
-}
+}*/
