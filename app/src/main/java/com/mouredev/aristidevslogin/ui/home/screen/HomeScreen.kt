@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,7 +47,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.mouredev.aristidevslogin.R
 import java.time.format.TextStyle
 
@@ -62,29 +67,23 @@ fun HomeScreen() {
             .background(Color.White)
             .fillMaxWidth()
     ) {
-
-        AsyncImage(
-            model = "http://res.cloudinary.com/dulpvbj0d/image/upload/v1711809162/mediaflix/lfqj4vvhxbhcxotdtdkn.jpg",
-            contentDescription = "Description of the image",
-            modifier = Modifier.size(100.dp)
-        )
+        
         SubcomposeAsyncImage(
             model = "http://res.cloudinary.com/dulpvbj0d/image/upload/v1711809162/mediaflix/lfqj4vvhxbhcxotdtdkn.jpg",
-            contentDescription = null,
-            loading = { CircularProgressIndicator() })
-
-
-        /*
-        Image(
+            contentDescription = "Hogwards Legacy PS4",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(250.dp)
-                .clip(RoundedCornerShape(22.dp, 22.dp, 0.dp, 0.dp)),
-            painter = painterResource(id = R.drawable.hogwards),
-            contentDescription = "Hogwards Legacy PS4",
-            contentScale = ContentScale.Crop
-        )
-        */
+                .clip(RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomStart = 0.dp, bottomEnd = 0.dp)),
+        ){
+            when(painter.state){
+                is AsyncImagePainter.State.Loading -> CircularProgressIndicator()
+                is AsyncImagePainter.State.Error -> Text(text = "Error")
+                else -> SubcomposeAsyncImageContent()
+            }
+        }
+
 
         Spacer(modifier = Modifier.height(6.dp))
 
