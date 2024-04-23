@@ -1,4 +1,4 @@
-package com.mouredev.aristidevslogin.entities
+package com.mouredev.aristidevslogin.data.model
 
 import java.util.Date
 
@@ -16,3 +16,4 @@ data class Product(
     val releaseDate: Date,
     val available: Boolean
 )
+

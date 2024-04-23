@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,31 +31,38 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import com.mouredev.aristidevslogin.data.model.Product
 
 @Composable
 fun ProductCard(
-    imageUrl: String,
-    title: String,
-    price: Double,
+    product: Product,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentHeight()
             .width(200.dp) // You can adjust the width as needed
             .padding(8.dp)
-            .clip(RoundedCornerShape(28.dp, 28.dp, 0.dp, 0.dp))
+            .clip(RoundedCornerShape(28.dp, 28.dp, 28.dp, 28.dp))
             .background(Color.White)
             .fillMaxWidth()
     ) {
 
         SubcomposeAsyncImage(
-            model = imageUrl, //Url de la imagen en Cloudinary
-            contentDescription = title,
+            model = product.url, //Url de la imagen en Cloudinary
+            contentDescription = product.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(250.dp)
-                .clip(RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomStart = 0.dp, bottomEnd = 0.dp)),
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 22.dp,
+                        topEnd = 22.dp,
+                        bottomStart = 0.dp,
+                        bottomEnd = 0.dp
+                    )
+                ),
         ) {
             when (val state = painter.state) {
                 is AsyncImagePainter.State.Loading -> CircularProgressIndicator()
@@ -66,8 +74,8 @@ fun ProductCard(
         Spacer(modifier = Modifier.height(6.dp))
 
         Text(
-            modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-            text = title,
+            modifier = Modifier.padding(start = 16.dp, end = 8.dp).align(Alignment.CenterHorizontally),
+            text = product.title,
             color = Color(35, 7, 59),
             fontSize = 15.sp,
             maxLines = 1,
@@ -86,9 +94,9 @@ fun ProductCard(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = price.toString() + " €",
+                    text = product.price.toString() + " €",
                     color = Color(35, 7, 59),
-                    fontSize = 20.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -101,12 +109,12 @@ fun ProductCard(
             ) {
                 Button(
                     onClick = { /* Handle button click */ },
-                    colors = ButtonDefaults.buttonColors(Color(35, 7, 59))
+                    colors = ButtonDefaults.buttonColors(Color(35, 7, 59)),
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.ShoppingCart,
                         contentDescription = "Shopping Cart",
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.fillMaxSize(),
                         tint = Color.White
                     )
                 }

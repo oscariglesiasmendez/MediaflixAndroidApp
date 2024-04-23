@@ -1,4 +1,4 @@
-package com.mouredev.aristidevslogin.entities
+package com.mouredev.aristidevslogin.data.model
 
 enum class ProductType {
     BOOK,

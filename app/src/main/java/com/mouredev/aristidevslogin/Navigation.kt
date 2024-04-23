@@ -7,7 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
+import com.mouredev.aristidevslogin.data.RetrofitInstance
 import com.mouredev.aristidevslogin.ui.home.screen.HomeScreen
+import com.mouredev.aristidevslogin.ui.home.ui.ProductsViewModel
 import com.mouredev.aristidevslogin.ui.login.screen.LoginScreen
 import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
 import com.mouredev.aristidevslogin.ui.signup.ui.SignUpViewModel
@@ -32,6 +35,7 @@ fun Navigation(navHostController: NavHostController) {
 
         val loginViewModel = LoginViewModel()
         val signUpViewModel = SignUpViewModel()
+        val homeviewModel = ProductsViewModel(ProductsRepositoryImpl(RetrofitInstance.api))
 
         navigation(startDestination = Route.WelcomeScreen().name, route = "welcome_flow") {
             composable(route = Route.WelcomeScreen().name) {
@@ -82,7 +86,7 @@ fun Navigation(navHostController: NavHostController) {
             }
 
             composable(route = Route.HomeScreen().name) {
-                HomeScreen()
+                HomeScreen(homeviewModel)
             }
         }
     }
