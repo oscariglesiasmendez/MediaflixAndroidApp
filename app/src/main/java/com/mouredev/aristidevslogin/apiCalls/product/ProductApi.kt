@@ -1,4 +1,4 @@
-package com.mouredev.aristidevslogin.apiCalls
+package com.mouredev.aristidevslogin.apiCalls.product
 
 import android.telecom.Call
 import com.mouredev.aristidevslogin.entities.ProductPage
@@ -14,6 +14,5 @@ interface ProductoApi {
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Deferred<ProductPage>
-
 
 }
