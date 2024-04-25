@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.mouredev.aristidevslogin.ui.theme.AlegreyaFontFamily
@@ -33,8 +34,7 @@ import com.mouredev.aristidevslogin.ui.theme.AlegreyaSansFontFamily
 
 @Composable
 fun WelcomeScreen(
-    onLoginClick: () -> Unit,
-    onSignUpClick: () -> Unit
+    navController: NavController
 ) {
 
     Box(
@@ -83,22 +83,15 @@ fun WelcomeScreen(
 
 
             CButton(text = "Inicia sesión con Email",
-                onClick = onLoginClick
+                onClick = { navController.navigate("Login") }
             )
 
             DontHaveAccountRow(
-                onSignupTap = onSignUpClick
+                onSignupTap = { navController.navigate("SignUp") }
             )
 
 
         }
     }
 
-}
-
-
-@Preview(showBackground = true, widthDp = 320, heightDp = 640)
-@Composable
-fun WelcomeScreenPreview() {
-    WelcomeScreen({},{})
 }

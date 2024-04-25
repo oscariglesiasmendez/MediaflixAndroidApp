@@ -14,7 +14,8 @@ class ProductsRepositoryImpl (
         return flow{
             val productsFromApi = try{
 
-                api.listAllProducts(1,100)
+                //api.listAllProducts(1,100)
+                api.listAllProducts()
 
             }catch(e: IOException){
                 e.printStackTrace()
@@ -30,7 +31,8 @@ class ProductsRepositoryImpl (
                 return@flow
             }
 
-            emit(Result.Success(productsFromApi.products))
+            //emit(Result.Success(productsFromApi.products))
+            emit(Result.Success(productsFromApi))
 
         }
 

@@ -1,6 +1,8 @@
 package com.mouredev.aristidevslogin.components
 
+import android.util.Base64
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -36,12 +39,14 @@ import com.mouredev.aristidevslogin.data.model.Product
 @Composable
 fun ProductCard(
     product: Product,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    //navController: NavHostController
 ) {
     Column(
         modifier = modifier
+            //.clickable { navController.navigate("productDetails?product=${product}") }
             .wrapContentHeight()
-            .width(200.dp) // You can adjust the width as needed
+            .width(200.dp)
             .padding(8.dp)
             .clip(RoundedCornerShape(28.dp, 28.dp, 28.dp, 28.dp))
             .background(Color.White)
@@ -74,7 +79,9 @@ fun ProductCard(
         Spacer(modifier = Modifier.height(6.dp))
 
         Text(
-            modifier = Modifier.padding(start = 16.dp, end = 8.dp).align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .padding(start = 16.dp, end = 8.dp)
+                .align(Alignment.CenterHorizontally),
             text = product.title,
             color = Color(35, 7, 59),
             fontSize = 15.sp,

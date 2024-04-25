@@ -9,21 +9,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
 import com.mouredev.aristidevslogin.data.RetrofitInstance
-import com.mouredev.aristidevslogin.ui.home.screen.HomeScreen
+import com.mouredev.aristidevslogin.data.model.Product
+import com.mouredev.aristidevslogin.ui.home.screen.BookScreen
+import com.mouredev.aristidevslogin.ui.home.screen.ProductDetailScreen
 import com.mouredev.aristidevslogin.ui.home.ui.ProductsViewModel
 import com.mouredev.aristidevslogin.ui.login.screen.LoginScreen
 import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
+import com.mouredev.aristidevslogin.ui.principal.screen.PrincipalScreen
 import com.mouredev.aristidevslogin.ui.signup.ui.SignUpViewModel
 import com.mouredev.aristidevslogin.ui.welcome.WelcomeScreen
 import com.mouredev.aristidevslogin.ui.signup.screen.SignUpScreen
-
-
-sealed class Route {
-    data class WelcomeScreen(val name: String = "Welcome") : Route()
-    data class LoginScreen(val name: String = "Login") : Route()
-    data class SignUpScreen(val name: String = "SignUp") : Route()
-    data class HomeScreen(val name: String = "Home") : Route()
-}
 
 
 @Composable
@@ -35,59 +30,50 @@ fun Navigation(navHostController: NavHostController) {
 
         val loginViewModel = LoginViewModel()
         val signUpViewModel = SignUpViewModel()
-        val homeviewModel = ProductsViewModel(ProductsRepositoryImpl(RetrofitInstance.api))
 
-        navigation(startDestination = Route.WelcomeScreen().name, route = "welcome_flow") {
-            composable(route = Route.WelcomeScreen().name) {
-                WelcomeScreen(onLoginClick = {
-                    navHostController.navigate(
-                        Route.LoginScreen().name
-                    )
-                },
-                    onSignUpClick = {
-                        navHostController.navigateToSingleTop(
-                            Route.SignUpScreen().name
-                        )
-                    })
+        navigation(startDestination = ScreenRoutes.WelcomeScreen().name, route = "welcome_flow") {
+            composable(route = ScreenRoutes.WelcomeScreen().name) {
+                WelcomeScreen(navController = navHostController)
             }
 
 
-            composable(route = Route.LoginScreen().name) {
+            composable(route = ScreenRoutes.LoginScreen().name) {
                 LoginScreen(
                     loginViewModel,
                     onLoginClick = {
                         navHostController.navigate(
-                            Route.HomeScreen().name
+                            ScreenRoutes.PrincipalScreen().name
                         )
                     },
                     onSignUpClick = {
                         navHostController.navigateToSingleTop(
-                            Route.SignUpScreen().name
+                            ScreenRoutes.SignUpScreen().name
                         )
                     }
                 )
             }
 
 
-            composable(route = Route.SignUpScreen().name) {
+            composable(route = ScreenRoutes.SignUpScreen().name) {
                 SignUpScreen(
                     signUpViewModel,
                     onSignUpClick = {
                         navHostController.navigate(
-                            Route.HomeScreen().name
+                            ScreenRoutes.PrincipalScreen().name
                         )
                     },
                     onLoginClick = {
                         navHostController.navigateToSingleTop(
-                            Route.LoginScreen().name
+                            ScreenRoutes.LoginScreen().name
                         )
                     }
                 )
             }
 
-            composable(route = Route.HomeScreen().name) {
-                HomeScreen(homeviewModel)
+            composable(route = ScreenRoutes.PrincipalScreen().name) {
+                PrincipalScreen()
             }
+
         }
     }
 }
