@@ -82,7 +82,7 @@ fun CTextFieldWithError(
                 containerColor = if (isError) Color.Red else Color.White,
                 focusedIndicatorColor = Color.White,
                 unfocusedIndicatorColor = Color.White,
-                textColor = Color.Black
+                //textColor = Color.Black
             ),
 
             )
@@ -114,7 +114,7 @@ fun CTextField(
             containerColor = Color.White,
             focusedIndicatorColor = Color.White,
             unfocusedIndicatorColor = Color.White,
-            textColor = Color.Black
+            //textColor = Color.Black
         )
     )
     if (errorMessage != null) {
@@ -153,7 +153,7 @@ fun CPasswordTextField(
             containerColor = Color.White,
             focusedIndicatorColor = Color.White,
             unfocusedIndicatorColor = Color.White,
-            textColor = Color.Black
+            //textColor = Color.Black
         ),
         trailingIcon = {
             val image = if (passwordVisible) {

@@ -56,5 +56,5 @@ object Routes {
     const val PRODUCT = "Product"
     const val BOOK = "Book"
     const val MOVIE = "Movie"
-    const val GAME = "Game"
+    const val GAME = "Movie"
 }
