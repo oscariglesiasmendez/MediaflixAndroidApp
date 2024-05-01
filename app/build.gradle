@@ -80,6 +80,9 @@ dependencies {
     //implementation "androidx.hilt:hilt-navigation-compose:1.2.0"
 
 
+    //Animated Botton Bar
+    implementation("com.exyte:animated-navigation-bar:1.0.0")
+
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
     implementation("androidx.navigation:navigation-compose:2.7.7")
@@ -100,4 +103,10 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+}
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        languageVersion = "1.8"
+        apiVersion = "1.8"
+    }
 }

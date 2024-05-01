@@ -1,0 +1,174 @@
+package com.mouredev.aristidevslogin.ui.principal.screen
+
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddBox
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.VideogameAsset
+import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.mouredev.aristidevslogin.R
+import com.mouredev.aristidevslogin.ScreenRoutes
+import com.mouredev.aristidevslogin.Screens1
+import com.mouredev.aristidevslogin.ui.home.screen.BookScreen
+import com.mouredev.aristidevslogin.ui.home.screen.MovieScreen
+import com.mouredev.aristidevslogin.ui.home.screen.ProductScreen
+import com.mouredev.aristidevslogin.ui.home.screen.ProfileScreen
+import kotlinx.coroutines.launch
+
+
+@Composable
+fun PrincipalScreen() {
+    NavDrawer()
+}
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NavDrawer() {
+    val navigationController = rememberNavController()
+    val coroutineScope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        gesturesEnabled = true,
+        drawerContent = {
+            ModalDrawerSheet {
+                Box(
+                    modifier = Modifier
+                        .background(Color(204, 173, 228))
+                        .fillMaxWidth()
+                        .height(50.dp)
+                ) {
+                    Text(text = "")
+                }
+
+                Divider()
+
+                NavigationDrawerItem(label = { Text(text = "Perfil") }, selected = false,
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "Person Icon"
+                        )
+                    },
+                    onClick = {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                        navigationController.navigate(ScreenRoutes.ProfileScreen().name) {
+                            popUpTo(0) //No se dejan pantallas abiertas en segundo plano
+                        }
+                    }
+                )
+
+                NavigationDrawerItem(label = { Text(text = "Pedidos") }, selected = false,
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.AddBox,
+                            contentDescription = "Order Icon"
+                        )
+                    },
+                    onClick = {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                        navigationController.navigate(ScreenRoutes.ProfileScreen().name) {
+                            popUpTo(0) //No se dejan pantallas abiertas en segundo plano
+                        }
+                    }
+                )
+
+                NavigationDrawerItem(label = { Text(text = "Carrito") }, selected = false,
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = "ShoppingCart Icon"
+                        )
+                    },
+                    onClick = {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                        navigationController.navigate(ScreenRoutes.MovieScreen().name) {
+                            popUpTo(0) //No se dejan pantallas abiertas en segundo plano
+                        }
+                    }
+                )
+
+                NavigationDrawerItem(label = { Text(text = "Contacto") }, selected = false,
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Phone,
+                            contentDescription = "Phone Icon"
+                        )
+                    },
+                    onClick = {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                        navigationController.navigate(ScreenRoutes.BookScreen().name) {
+                            popUpTo(0) //No se dejan pantallas abiertas en segundo plano
+                        }
+                    }
+                )
+
+            }
+        },
+
+        ) {
+
+        Scaffold(
+            topBar = {
+                val coroutineScope = rememberCoroutineScope()
+                TopAppBar(title = { Text(text = "Mediaflix") }, navigationIcon = {
+                    IconButton(
+                        onClick = { coroutineScope.launch { drawerState.open() } }
+                    ) {
+                        Icon(Icons.Rounded.Menu, contentDescription = "MenuButton")
+                    }
+                })
+            }
+        ) {
+            NavHost(navController = navigationController, startDestination = ScreenRoutes.ProfileScreen().name) {
+                composable(ScreenRoutes.ProfileScreen().name){ ProfileScreen() }
+                composable(ScreenRoutes.ProfileScreen().name){ ProfileScreen() }
+                composable(ScreenRoutes.MovieScreen().name){ MovieScreen() }
+                composable(ScreenRoutes.BookScreen().name){ BookScreen()}
+            }
+        }
+
+    }
+
+}
