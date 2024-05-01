@@ -7,12 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
-import com.mouredev.aristidevslogin.data.RetrofitInstance
-import com.mouredev.aristidevslogin.data.model.Product
-import com.mouredev.aristidevslogin.ui.home.screen.BookScreen
-import com.mouredev.aristidevslogin.ui.home.screen.ProductDetailScreen
-import com.mouredev.aristidevslogin.ui.home.ui.ProductsViewModel
 import com.mouredev.aristidevslogin.ui.login.screen.LoginScreen
 import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
 import com.mouredev.aristidevslogin.ui.principal.screen.PrincipalScreen
@@ -36,7 +30,6 @@ fun Navigation(navHostController: NavHostController) {
                 WelcomeScreen(navController = navHostController)
             }
 
-
             composable(route = ScreenRoutes.LoginScreen().name) {
                 LoginScreen(
                     loginViewModel,
@@ -52,7 +45,6 @@ fun Navigation(navHostController: NavHostController) {
                     }
                 )
             }
-
 
             composable(route = ScreenRoutes.SignUpScreen().name) {
                 SignUpScreen(
