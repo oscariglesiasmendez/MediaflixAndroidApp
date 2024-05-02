@@ -1,5 +1,8 @@
 package com.mouredev.aristidevslogin.data
 
+import com.mouredev.aristidevslogin.data.model.Book
+import com.mouredev.aristidevslogin.data.model.Game
+import com.mouredev.aristidevslogin.data.model.Movie
 import com.mouredev.aristidevslogin.data.model.Product
 import com.mouredev.aristidevslogin.data.model.ProductPage
 import retrofit2.http.GET
@@ -18,6 +21,19 @@ interface Api {
     @GET("products/all")
     suspend fun listAllProducts(
     ): List<Product>
+
+
+    @GET("books/all")
+    suspend fun listAllBooks(
+    ): List<Book>
+
+    @GET("movies/all")
+    suspend fun listAllMovies(
+    ): List<Movie>
+
+    @GET("games/all")
+    suspend fun listAllGames(
+    ): List<Game>
 
 
     companion object{

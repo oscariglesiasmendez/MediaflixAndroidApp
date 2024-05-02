@@ -13,5 +13,5 @@ sealed class ScreenRoutes {
     data class ProductScreen(val name : String = "Product") : ScreenRoutes()
     data class BookScreen(val name : String = "Book") : ScreenRoutes()
     data class MovieScreen(val name : String = "Movie") : ScreenRoutes()
-    data class GameScreen(val name : String = "Movie") : ScreenRoutes()
+    data class GameScreen(val name : String = "Game") : ScreenRoutes()
 }

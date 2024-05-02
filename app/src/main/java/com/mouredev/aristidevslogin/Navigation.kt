@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.mouredev.aristidevslogin.ui.login.screen.LoginScreen
 import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
-import com.mouredev.aristidevslogin.ui.principal.screen.PrincipalScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.PrincipalScreen
 import com.mouredev.aristidevslogin.ui.signup.ui.SignUpViewModel
 import com.mouredev.aristidevslogin.ui.welcome.WelcomeScreen
 import com.mouredev.aristidevslogin.ui.signup.screen.SignUpScreen

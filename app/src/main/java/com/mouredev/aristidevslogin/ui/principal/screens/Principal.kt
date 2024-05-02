@@ -1,11 +1,9 @@
-package com.mouredev.aristidevslogin.ui.principal.screen
+package com.mouredev.aristidevslogin.ui.principal.screens
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
@@ -28,7 +25,6 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
@@ -53,14 +49,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mouredev.aristidevslogin.R
 import com.mouredev.aristidevslogin.ScreenRoutes
-import com.mouredev.aristidevslogin.Screens1
+import com.mouredev.aristidevslogin.data.BooksRepositoryImpl
+import com.mouredev.aristidevslogin.data.GamesRepositoryImpl
+import com.mouredev.aristidevslogin.data.MoviesRepositoryImpl
 import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
 import com.mouredev.aristidevslogin.data.RetrofitInstance
-import com.mouredev.aristidevslogin.ui.home.screen.BookScreen
-import com.mouredev.aristidevslogin.ui.home.screen.MovieScreen
-import com.mouredev.aristidevslogin.ui.home.screen.ProductScreen
-import com.mouredev.aristidevslogin.ui.home.screen.ProfileScreen
-import com.mouredev.aristidevslogin.ui.home.ui.ProductsViewModel
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.BookScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.GameScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.MovieScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.ProductScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.ProfileScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.BooksViewModel
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.GamesViewModel
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.MoviesViewModel
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
 import kotlinx.coroutines.launch
 
 
@@ -80,6 +82,9 @@ fun NavBotSheet() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     val productViewModel  = ProductsViewModel(ProductsRepositoryImpl(RetrofitInstance.api))
+    val bookViewModel  = BooksViewModel(BooksRepositoryImpl(RetrofitInstance.api))
+    val movieViewModel  = MoviesViewModel(MoviesRepositoryImpl(RetrofitInstance.api))
+    val gameViewModel  = GamesViewModel(GamesRepositoryImpl(RetrofitInstance.api))
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -184,13 +189,13 @@ fun NavBotSheet() {
             ) {
                 composable(ScreenRoutes.ProfileScreen().name) { ProfileScreen() }
                 composable(ScreenRoutes.OrdersScreen().name) { ProfileScreen() }
-                composable(ScreenRoutes.CartScreen().name) { MovieScreen() }
-                composable(ScreenRoutes.ContactScreen().name) { BookScreen() }
+                composable(ScreenRoutes.CartScreen().name) { ProfileScreen() }
+                composable(ScreenRoutes.ContactScreen().name) { BookScreen(bookViewModel) }
 
                 composable(ScreenRoutes.ProductScreen().name) { ProductScreen(productViewModel) }
-                composable(ScreenRoutes.BookScreen().name) { BookScreen() }
-                composable(ScreenRoutes.MovieScreen().name) { MovieScreen() }
-                composable(ScreenRoutes.GameScreen().name) { MovieScreen() }
+                composable(ScreenRoutes.BookScreen().name) { BookScreen(bookViewModel) }
+                composable(ScreenRoutes.MovieScreen().name) { MovieScreen(movieViewModel) }
+                composable(ScreenRoutes.GameScreen().name) { GameScreen(gameViewModel) }
 
 
             }
@@ -302,7 +307,7 @@ fun NavBarHeader() {
     }
 }
 
-
+/*
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BottonBar() {
@@ -397,8 +402,8 @@ fun BottonBar() {
             startDestination = ScreenRoutes.BookScreen().name,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(ScreenRoutes.BookScreen().name) { BookScreen() }
-            composable(ScreenRoutes.BookScreen().name) { BookScreen() }
+            //composable(ScreenRoutes.BookScreen().name) { BookScreen(bookViewModel) }
+            //composable(ScreenRoutes.BookScreen().name) { BookScreen(bookViewModel) }
             composable(ScreenRoutes.MovieScreen().name) { MovieScreen() }
             composable(ScreenRoutes.MovieScreen().name) { MovieScreen() }
         }
@@ -407,7 +412,7 @@ fun BottonBar() {
 
 
 }
-
+*/
 
 /*
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
