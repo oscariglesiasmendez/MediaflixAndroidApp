@@ -15,7 +15,7 @@ class Movie(
     genre: String,
     releaseDate: Date,
     available: Boolean,
-    val director: Int,
+    val director: String,
     val duration: Int,
     val studio: String,
     val urlTrailer: String

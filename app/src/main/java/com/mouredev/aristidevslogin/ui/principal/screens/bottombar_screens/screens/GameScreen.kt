@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.mouredev.aristidevslogin.components.ProductCard
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.GamesViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun GameScreen(viewModel: GamesViewModel) {
+fun GameScreen(viewModel: GamesViewModel, navigationController: NavHostController) {
 
     val gameList = viewModel.games.collectAsState().value
     val context = LocalContext.current
@@ -63,11 +64,13 @@ fun GameScreen(viewModel: GamesViewModel) {
                 ) {
                     ProductCard(
                         product = gameList[2 * row],
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        navigationController = navigationController
                     )
                     ProductCard(
                         product = gameList[2 * row + 1],
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        navigationController = navigationController
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))

@@ -1,5 +1,25 @@
 package com.mouredev.aristidevslogin
 
+import com.mouredev.aristidevslogin.data.model.Product
+
+
+sealed class ScreenRoutes(val route:String) {
+    object WelcomeScreen : ScreenRoutes("Welcome")
+    object LoginScreen: ScreenRoutes("Login")
+    object SignUpScreen: ScreenRoutes("SignUp")
+    object PrincipalScreen: ScreenRoutes("Principal")
+    object ProductDetailScreen: ScreenRoutes("ProductDetail")
+    object ProfileScreen: ScreenRoutes("Profile")
+    object OrdersScreen: ScreenRoutes("Orders")
+    object CartScreen: ScreenRoutes("Cart")
+    object ContactScreen: ScreenRoutes( "Contact")
+    object ProductScreen: ScreenRoutes("Product")
+    object BookScreen: ScreenRoutes("Book")
+    object MovieScreen: ScreenRoutes("Movie")
+    object GameScreen: ScreenRoutes( "Game")
+}
+
+/*
 sealed class ScreenRoutes {
     data class WelcomeScreen(val name: String = "Welcome") : ScreenRoutes()
     data class LoginScreen(val name: String = "Login") : ScreenRoutes()
@@ -15,3 +35,8 @@ sealed class ScreenRoutes {
     data class MovieScreen(val name : String = "Movie") : ScreenRoutes()
     data class GameScreen(val name : String = "Game") : ScreenRoutes()
 }
+ */
+
+
+
+

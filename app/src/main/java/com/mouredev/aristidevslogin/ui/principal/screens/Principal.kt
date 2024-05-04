@@ -44,9 +44,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.mouredev.aristidevslogin.R
 import com.mouredev.aristidevslogin.ScreenRoutes
 import com.mouredev.aristidevslogin.data.BooksRepositoryImpl
@@ -54,9 +56,12 @@ import com.mouredev.aristidevslogin.data.GamesRepositoryImpl
 import com.mouredev.aristidevslogin.data.MoviesRepositoryImpl
 import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
 import com.mouredev.aristidevslogin.data.RetrofitInstance
+import com.mouredev.aristidevslogin.data.model.Product
+import com.mouredev.aristidevslogin.data.model.ProductType
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.BookScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.GameScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.MovieScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.ProductDetailScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.ProductScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.ProfileScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.BooksViewModel
@@ -64,6 +69,7 @@ import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.Ga
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.MoviesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
 import kotlinx.coroutines.launch
+import java.util.Date
 
 
 @Composable
@@ -81,10 +87,10 @@ fun NavBotSheet() {
     val coroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    val productViewModel  = ProductsViewModel(ProductsRepositoryImpl(RetrofitInstance.api))
-    val bookViewModel  = BooksViewModel(BooksRepositoryImpl(RetrofitInstance.api))
-    val movieViewModel  = MoviesViewModel(MoviesRepositoryImpl(RetrofitInstance.api))
-    val gameViewModel  = GamesViewModel(GamesRepositoryImpl(RetrofitInstance.api))
+    val productViewModel = ProductsViewModel(ProductsRepositoryImpl(RetrofitInstance.api))
+    val bookViewModel = BooksViewModel(BooksRepositoryImpl(RetrofitInstance.api))
+    val movieViewModel = MoviesViewModel(MoviesRepositoryImpl(RetrofitInstance.api))
+    val gameViewModel = GamesViewModel(GamesRepositoryImpl(RetrofitInstance.api))
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -108,7 +114,7 @@ fun NavBotSheet() {
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                        navigationController.navigate(ScreenRoutes.ProfileScreen().name) {
+                        navigationController.navigate(ScreenRoutes.ProfileScreen.route) {
                             popUpTo(0)
                         }
                     }
@@ -125,7 +131,7 @@ fun NavBotSheet() {
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                        navigationController.navigate(ScreenRoutes.ProfileScreen().name) {
+                        navigationController.navigate(ScreenRoutes.ProfileScreen.route) {
                             popUpTo(0) //No se dejan pantallas abiertas en segundo plano
                         }
                     }
@@ -142,7 +148,7 @@ fun NavBotSheet() {
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                        navigationController.navigate(ScreenRoutes.MovieScreen().name) {
+                        navigationController.navigate(ScreenRoutes.MovieScreen.route) {
                             popUpTo(0) //No se dejan pantallas abiertas en segundo plano
                         }
                     }
@@ -159,7 +165,7 @@ fun NavBotSheet() {
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                        navigationController.navigate(ScreenRoutes.BookScreen().name) {
+                        navigationController.navigate(ScreenRoutes.BookScreen.route) {
                             popUpTo(0) //No se dejan pantallas abiertas en segundo plano
                         }
                     }
@@ -185,18 +191,33 @@ fun NavBotSheet() {
         ) {
             NavHost(
                 navController = navigationController,
-                startDestination = ScreenRoutes.ProductScreen().name
+                startDestination = ScreenRoutes.ProductScreen.route
             ) {
-                composable(ScreenRoutes.ProfileScreen().name) { ProfileScreen() }
-                composable(ScreenRoutes.OrdersScreen().name) { ProfileScreen() }
-                composable(ScreenRoutes.CartScreen().name) { ProfileScreen() }
-                composable(ScreenRoutes.ContactScreen().name) { BookScreen(bookViewModel) }
+                composable(ScreenRoutes.ProfileScreen.route) { ProfileScreen() }
+                composable(ScreenRoutes.OrdersScreen.route) { ProfileScreen() }
+                composable(ScreenRoutes.CartScreen.route) { ProfileScreen() }
+                composable(ScreenRoutes.ContactScreen.route) { BookScreen(bookViewModel, navigationController) }
 
-                composable(ScreenRoutes.ProductScreen().name) { ProductScreen(productViewModel) }
-                composable(ScreenRoutes.BookScreen().name) { BookScreen(bookViewModel) }
-                composable(ScreenRoutes.MovieScreen().name) { MovieScreen(movieViewModel) }
-                composable(ScreenRoutes.GameScreen().name) { GameScreen(gameViewModel) }
+                composable(ScreenRoutes.ProductScreen.route) { ProductScreen(productViewModel, navigationController) }
 
+                composable(ScreenRoutes.BookScreen.route) { BookScreen(bookViewModel, navigationController) }
+                composable(ScreenRoutes.MovieScreen.route) { MovieScreen(movieViewModel, navigationController) }
+                composable(ScreenRoutes.GameScreen.route) { GameScreen(gameViewModel, navigationController) }
+
+
+                // https://stackoverflow.com/questions/69181995/how-to-navigate-to-detail-view-clicking-in-lazycolumn-item-with-jetpack-compose
+
+                composable(route = ScreenRoutes.ProductDetailScreen.route + "/{product}",
+                    arguments = listOf(
+                        navArgument(name = "product") {
+                            type = NavType.IntType
+                        }
+                    )
+                ) {product->
+                    ProductDetailScreen(
+                        product = product.arguments?.getInt("product")
+                    )
+                }
 
             }
 
@@ -215,7 +236,9 @@ fun BottomBar(navigationController: NavController) {
     }
 
     BottomAppBar(
-        modifier = Modifier.height(50.dp).background(Color(35, 7, 59)),
+        modifier = Modifier
+            .height(50.dp)
+            .background(Color(35, 7, 59)),
         content = {
             Row(
                 modifier = Modifier
@@ -226,7 +249,7 @@ fun BottomBar(navigationController: NavController) {
             ) {
                 IconButton(onClick = {
                     selected.value = Icons.Default.List
-                    navigationController.navigate(ScreenRoutes.ProductScreen().name) {
+                    navigationController.navigate(ScreenRoutes.ProductScreen.route) {
                         popUpTo(0)
                     }
                 }) {
@@ -234,13 +257,17 @@ fun BottomBar(navigationController: NavController) {
                         Icons.Default.List,
                         contentDescription = "Game Icon",
                         modifier = Modifier.size(40.dp),
-                        tint = if (selected.value == Icons.Default.List) Color.White else Color(204, 173, 228)
+                        tint = if (selected.value == Icons.Default.List) Color.White else Color(
+                            204,
+                            173,
+                            228
+                        )
                     )
                 }
 
                 IconButton(onClick = {
                     selected.value = Icons.Default.Book
-                    navigationController.navigate(ScreenRoutes.BookScreen().name) {
+                    navigationController.navigate(ScreenRoutes.BookScreen.route) {
                         popUpTo(0)
                     }
                 }) {
@@ -248,12 +275,17 @@ fun BottomBar(navigationController: NavController) {
                         Icons.Default.Book,
                         contentDescription = "Book Icon",
                         modifier = Modifier.size(40.dp),
-                        tint = if (selected.value == Icons.Default.Book) Color.White else Color(204, 173, 228)                    )
+                        tint = if (selected.value == Icons.Default.Book) Color.White else Color(
+                            204,
+                            173,
+                            228
+                        )
+                    )
                 }
 
                 IconButton(onClick = {
                     selected.value = Icons.Default.Movie
-                    navigationController.navigate(ScreenRoutes.MovieScreen().name) {
+                    navigationController.navigate(ScreenRoutes.MovieScreen.route) {
                         popUpTo(0)
                     }
                 }) {
@@ -261,13 +293,17 @@ fun BottomBar(navigationController: NavController) {
                         Icons.Default.Movie,
                         contentDescription = "Movie Icon",
                         modifier = Modifier.size(40.dp),
-                        tint = if (selected.value == Icons.Default.Movie) Color.White else Color(204, 173, 228)
+                        tint = if (selected.value == Icons.Default.Movie) Color.White else Color(
+                            204,
+                            173,
+                            228
+                        )
                     )
                 }
 
                 IconButton(onClick = {
                     selected.value = Icons.Default.VideogameAsset
-                    navigationController.navigate(ScreenRoutes.GameScreen().name) {
+                    navigationController.navigate(ScreenRoutes.GameScreen.route) {
                         popUpTo(0)
                     }
                 }) {
@@ -275,7 +311,11 @@ fun BottomBar(navigationController: NavController) {
                         Icons.Default.VideogameAsset,
                         contentDescription = "Game Icon",
                         modifier = Modifier.size(40.dp),
-                        tint = if (selected.value == Icons.Default.VideogameAsset) Color.White else Color(204, 173, 228)
+                        tint = if (selected.value == Icons.Default.VideogameAsset) Color.White else Color(
+                            204,
+                            173,
+                            228
+                        )
                     )
                 }
             }

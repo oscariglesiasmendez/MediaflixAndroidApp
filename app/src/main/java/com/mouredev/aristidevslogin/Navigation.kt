@@ -25,44 +25,44 @@ fun Navigation(navHostController: NavHostController) {
         val loginViewModel = LoginViewModel()
         val signUpViewModel = SignUpViewModel()
 
-        navigation(startDestination = ScreenRoutes.WelcomeScreen().name, route = "welcome_flow") {
-            composable(route = ScreenRoutes.WelcomeScreen().name) {
+        navigation(startDestination = ScreenRoutes.WelcomeScreen.route, route = "welcome_flow") {
+            composable(route = ScreenRoutes.WelcomeScreen.route) {
                 WelcomeScreen(navController = navHostController)
             }
 
-            composable(route = ScreenRoutes.LoginScreen().name) {
+            composable(route = ScreenRoutes.LoginScreen.route) {
                 LoginScreen(
                     loginViewModel,
                     onLoginClick = {
                         navHostController.navigate(
-                            ScreenRoutes.PrincipalScreen().name
+                            ScreenRoutes.PrincipalScreen.route
                         )
                     },
                     onSignUpClick = {
                         navHostController.navigateToSingleTop(
-                            ScreenRoutes.SignUpScreen().name
+                            ScreenRoutes.SignUpScreen.route
                         )
                     }
                 )
             }
 
-            composable(route = ScreenRoutes.SignUpScreen().name) {
+            composable(route = ScreenRoutes.SignUpScreen.route) {
                 SignUpScreen(
                     signUpViewModel,
                     onSignUpClick = {
                         navHostController.navigate(
-                            ScreenRoutes.PrincipalScreen().name
+                            ScreenRoutes.PrincipalScreen.route
                         )
                     },
                     onLoginClick = {
                         navHostController.navigateToSingleTop(
-                            ScreenRoutes.LoginScreen().name
+                            ScreenRoutes.LoginScreen.route
                         )
                     }
                 )
             }
 
-            composable(route = ScreenRoutes.PrincipalScreen().name) {
+            composable(route = ScreenRoutes.PrincipalScreen.route) {
                 PrincipalScreen()
             }
 

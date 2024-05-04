@@ -35,7 +35,7 @@ class MoviesViewModel(
                     }
 
                     is Result.Success -> {
-                        //Cambiamos el state de nuestras peliculas para que haga recompose
+                        //Cambiamos el state de nuestros libros para que haga recompose
                         //Me aseguro de que no es nulo antes de iterar
                         result.data?.let { movies ->
                             _movies.update { movies }

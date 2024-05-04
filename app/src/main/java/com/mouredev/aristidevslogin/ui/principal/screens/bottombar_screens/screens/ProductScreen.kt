@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.mouredev.aristidevslogin.components.ProductCard
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -29,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("CoroutineCreationDuringComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProductScreen(viewModel: ProductsViewModel) {
+fun ProductScreen(viewModel: ProductsViewModel, navigationController: NavHostController) {
 
     val productList = viewModel.products.collectAsState().value
     val context = LocalContext.current
@@ -66,11 +67,13 @@ fun ProductScreen(viewModel: ProductsViewModel) {
                 ) {
                     ProductCard(
                         product = productList[2 * row],
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        navigationController
                     )
                     ProductCard(
                         product = productList[2 * row + 1],
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        navigationController
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))

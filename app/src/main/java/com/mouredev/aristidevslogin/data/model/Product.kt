@@ -1,7 +1,7 @@
 package com.mouredev.aristidevslogin.data.model
 
+import androidx.versionedparcelable.VersionedParcelize
 import java.util.Date
-
 
 open class Product(
     open val productId: Long?,
