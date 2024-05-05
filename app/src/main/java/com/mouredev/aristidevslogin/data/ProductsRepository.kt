@@ -7,4 +7,6 @@ interface ProductsRepository {
 
     suspend fun getProductsList():Flow<Result<List<Product>>>
 
+    suspend fun getProductById(productId: Long): Flow<Result<Product>>
+
 }

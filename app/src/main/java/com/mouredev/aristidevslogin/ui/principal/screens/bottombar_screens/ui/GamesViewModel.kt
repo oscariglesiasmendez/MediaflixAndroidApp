@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mouredev.aristidevslogin.data.GamesRepository
 import com.mouredev.aristidevslogin.data.Result
+import com.mouredev.aristidevslogin.data.model.Book
 import com.mouredev.aristidevslogin.data.model.Game
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,6 +23,9 @@ class GamesViewModel(
 
     private val _games = MutableStateFlow<List<Game>>(emptyList())
     val games = _games.asStateFlow()
+
+    private val _game = MutableStateFlow<Result<Game>?>(null)
+    val game = _game.asStateFlow()
 
     //Mensajes visual de error
     private val _showErrorToastChannel = Channel<Boolean>()
@@ -43,6 +48,14 @@ class GamesViewModel(
                     }
                 }
             }
+        }
+    }
+
+    fun loadGame(gameId: Long) {
+        viewModelScope.launch {
+            val gameResult = gamesRepository.getGameById(gameId)
+                .first()
+            _game.value = gameResult
         }
     }
 }

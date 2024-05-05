@@ -38,4 +38,31 @@ class ProductsRepositoryImpl (
 
     }
 
+
+    override suspend fun getProductById(productId: Long): Flow<Result<Product>> {
+        return flow {
+            val productFromApi = try {
+                api.getProductById(productId)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                emit(Result.Error(message = "Error fetching product"))
+                return@flow
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                if (e.code() == 404) {
+                    emit(Result.Error(message = "Product not found"))
+                } else {
+                    emit(Result.Error(message = "Error fetching product"))
+                }
+                return@flow
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Result.Error(message = "Error fetching product"))
+                return@flow
+            }
+
+            emit(Result.Success(productFromApi))
+        }
+    }
+
 }

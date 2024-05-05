@@ -1,5 +1,6 @@
 package com.mouredev.aristidevslogin.data
 
+import com.mouredev.aristidevslogin.data.model.Book
 import com.mouredev.aristidevslogin.data.model.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -33,6 +34,33 @@ class MoviesRepositoryImpl(
             emit(Result.Success(moviesFromApi))
         }
 
+    }
+
+
+    override suspend fun getMovieById(movieId: Long): Flow<Result<Movie>> {
+        return flow {
+            val movieFromApi = try {
+                api.getMovieById(movieId)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                emit(Result.Error(message = "Error fetching movie"))
+                return@flow
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                if (e.code() == 404) {
+                    emit(Result.Error(message = "Movie not found"))
+                } else {
+                    emit(Result.Error(message = "Error fetching movie"))
+                }
+                return@flow
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Result.Error(message = "Error fetching movie"))
+                return@flow
+            }
+
+            emit(Result.Success(movieFromApi))
+        }
     }
 
 }

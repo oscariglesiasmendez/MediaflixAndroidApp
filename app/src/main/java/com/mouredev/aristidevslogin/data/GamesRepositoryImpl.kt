@@ -1,5 +1,6 @@
 package com.mouredev.aristidevslogin.data
 
+import com.mouredev.aristidevslogin.data.model.Book
 import com.mouredev.aristidevslogin.data.model.Game
 import com.mouredev.aristidevslogin.data.model.Movie
 import kotlinx.coroutines.flow.Flow
@@ -34,6 +35,33 @@ class GamesRepositoryImpl(
             emit(Result.Success(gamesFromApi))
         }
 
+    }
+
+
+    override suspend fun getGameById(gameId: Long): Flow<Result<Game>> {
+        return flow {
+            val gameFromApi = try {
+                api.getGameById(gameId)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                emit(Result.Error(message = "Error fetching game"))
+                return@flow
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                if (e.code() == 404) {
+                    emit(Result.Error(message = "Game not found"))
+                } else {
+                    emit(Result.Error(message = "Error fetching game"))
+                }
+                return@flow
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Result.Error(message = "Error fetching game"))
+                return@flow
+            }
+
+            emit(Result.Success(gameFromApi))
+        }
     }
 
 }

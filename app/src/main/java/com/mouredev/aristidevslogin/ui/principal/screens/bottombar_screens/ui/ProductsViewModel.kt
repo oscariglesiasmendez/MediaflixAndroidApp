@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,6 +22,9 @@ class ProductsViewModel(
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products = _products.asStateFlow()
+
+    private val _product = MutableStateFlow<Result<Product>?>(null) // Initial value is null
+    val product = _product.asStateFlow()
 
     //Mensajes visual de error
     private val _showErrorToastChannel = Channel<Boolean>()
@@ -45,4 +49,14 @@ class ProductsViewModel(
             }
         }
     }
+
+
+    fun loadProduct(productId: Long) {
+        viewModelScope.launch {
+            val productResult = productsRepository.getProductById(productId)
+                .first() // Collect the first emitted value from the Flow
+            _product.value = productResult
+        }
+    }
+
 }

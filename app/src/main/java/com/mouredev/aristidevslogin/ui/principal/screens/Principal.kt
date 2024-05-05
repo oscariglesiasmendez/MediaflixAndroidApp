@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.Book
@@ -35,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -56,8 +60,6 @@ import com.mouredev.aristidevslogin.data.GamesRepositoryImpl
 import com.mouredev.aristidevslogin.data.MoviesRepositoryImpl
 import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
 import com.mouredev.aristidevslogin.data.RetrofitInstance
-import com.mouredev.aristidevslogin.data.model.Product
-import com.mouredev.aristidevslogin.data.model.ProductType
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.BookScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.GameScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.MovieScreen
@@ -69,7 +71,6 @@ import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.Ga
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.MoviesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
 import kotlinx.coroutines.launch
-import java.util.Date
 
 
 @Composable
@@ -87,10 +88,14 @@ fun NavBotSheet() {
     val coroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    val productViewModel = ProductsViewModel(ProductsRepositoryImpl(RetrofitInstance.api))
+    val productRepository = ProductsRepositoryImpl(RetrofitInstance.api)
+
+    val productViewModel = ProductsViewModel(productRepository)
     val bookViewModel = BooksViewModel(BooksRepositoryImpl(RetrofitInstance.api))
     val movieViewModel = MoviesViewModel(MoviesRepositoryImpl(RetrofitInstance.api))
     val gameViewModel = GamesViewModel(GamesRepositoryImpl(RetrofitInstance.api))
+
+    var badgeCount: Int = 0
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -151,6 +156,22 @@ fun NavBotSheet() {
                         navigationController.navigate(ScreenRoutes.MovieScreen.route) {
                             popUpTo(0) //No se dejan pantallas abiertas en segundo plano
                         }
+                    },
+                    badge = {
+                        if (badgeCount >= 0) { // Check for non-zero badge count
+                            Box(
+                                modifier = Modifier
+                                    .padding(top = 4.dp, end = 4.dp)
+                                    .size(16.dp)
+                                    .background(Color.Red, shape = CircleShape)
+                            ) {
+                                Text(
+                                    text = badgeCount.toString(),
+                                    color = Color.White,
+                                    fontSize = 10.sp
+                                )
+                            }
+                        }
                     }
                 )
 
@@ -196,13 +217,38 @@ fun NavBotSheet() {
                 composable(ScreenRoutes.ProfileScreen.route) { ProfileScreen() }
                 composable(ScreenRoutes.OrdersScreen.route) { ProfileScreen() }
                 composable(ScreenRoutes.CartScreen.route) { ProfileScreen() }
-                composable(ScreenRoutes.ContactScreen.route) { BookScreen(bookViewModel, navigationController) }
+                composable(ScreenRoutes.ContactScreen.route) {
+                    BookScreen(
+                        bookViewModel,
+                        navigationController
+                    )
+                }
 
-                composable(ScreenRoutes.ProductScreen.route) { ProductScreen(productViewModel, navigationController) }
+                composable(ScreenRoutes.ProductScreen.route) {
+                    ProductScreen(
+                        productViewModel,
+                        navigationController
+                    )
+                }
 
-                composable(ScreenRoutes.BookScreen.route) { BookScreen(bookViewModel, navigationController) }
-                composable(ScreenRoutes.MovieScreen.route) { MovieScreen(movieViewModel, navigationController) }
-                composable(ScreenRoutes.GameScreen.route) { GameScreen(gameViewModel, navigationController) }
+                composable(ScreenRoutes.BookScreen.route) {
+                    BookScreen(
+                        bookViewModel,
+                        navigationController
+                    )
+                }
+                composable(ScreenRoutes.MovieScreen.route) {
+                    MovieScreen(
+                        movieViewModel,
+                        navigationController
+                    )
+                }
+                composable(ScreenRoutes.GameScreen.route) {
+                    GameScreen(
+                        gameViewModel,
+                        navigationController
+                    )
+                }
 
 
                 // https://stackoverflow.com/questions/69181995/how-to-navigate-to-detail-view-clicking-in-lazycolumn-item-with-jetpack-compose
@@ -210,13 +256,20 @@ fun NavBotSheet() {
                 composable(route = ScreenRoutes.ProductDetailScreen.route + "/{product}",
                     arguments = listOf(
                         navArgument(name = "product") {
-                            type = NavType.IntType
+                            type = NavType.LongType
                         }
                     )
-                ) {product->
-                    ProductDetailScreen(
-                        product = product.arguments?.getInt("product")
-                    )
+                ) { product ->
+
+                    var productId = product.arguments?.getLong("product")
+
+                    if (productId != null) {
+                        productViewModel.loadProduct(productId)
+
+                        val product = productViewModel.product.collectAsState().value?.data
+
+                        ProductDetailScreen(product, bookViewModel, movieViewModel, gameViewModel)
+                    }
                 }
 
             }

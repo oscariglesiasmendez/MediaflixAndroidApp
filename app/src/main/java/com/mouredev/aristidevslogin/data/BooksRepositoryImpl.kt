@@ -1,6 +1,7 @@
 package com.mouredev.aristidevslogin.data
 
 import com.mouredev.aristidevslogin.data.model.Book
+import com.mouredev.aristidevslogin.data.model.Product
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -33,6 +34,33 @@ class BooksRepositoryImpl(
             emit(Result.Success(booksFromApi))
         }
 
+    }
+
+
+    override suspend fun getBookById(bookId: Long): Flow<Result<Book>> {
+        return flow {
+            val bookFromApi = try {
+                api.getBookById(bookId)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                emit(Result.Error(message = "Error fetching book"))
+                return@flow
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                if (e.code() == 404) {
+                    emit(Result.Error(message = "Book not found"))
+                } else {
+                    emit(Result.Error(message = "Error fetching book"))
+                }
+                return@flow
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Result.Error(message = "Error fetching book"))
+                return@flow
+            }
+
+            emit(Result.Success(bookFromApi))
+        }
     }
 
 }
