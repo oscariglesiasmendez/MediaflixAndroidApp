@@ -1,6 +1,7 @@
 package com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -88,6 +89,8 @@ fun ProductDetailScreen(
             ProductType.GAME -> {
                 product.productId?.let { gameViewModel.loadGame(it) }
                 val game = gameViewModel.game.collectAsState().value?.data
+
+                GameDetail(game)
             }
         }
 
@@ -100,6 +103,8 @@ fun ProductDetailScreen(
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun BookDetail(book: Book?) {
+
+    val context = LocalContext.current
 
     if (book == null) {
         CircularProgressIndicator()
@@ -221,9 +226,15 @@ fun BookDetail(book: Book?) {
                                 .padding(horizontal = 16.dp),
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            
+
                             Button(
-                                onClick = {  },
+                                onClick = {
+                                    Toast.makeText(
+                                        context,
+                                        "Se ha agregado el libro al carrito",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                },
                                 modifier = Modifier.fillMaxWidth(),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -265,7 +276,7 @@ fun BookDetail(book: Book?) {
                         .fillMaxWidth()
                         .padding(horizontal = 70.dp, vertical = 25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     Text(
                         text = "Ficha técnica",
                         textAlign = TextAlign.Center,
@@ -325,10 +336,11 @@ fun BookDetail(book: Book?) {
 }
 
 
-
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun MovieDetail(movie: Movie?) {
+
+    val context = LocalContext.current
 
     if (movie == null) {
         CircularProgressIndicator()
@@ -452,7 +464,13 @@ fun MovieDetail(movie: Movie?) {
                         ) {
 
                             Button(
-                                onClick = {  }, //TODO
+                                onClick = {
+                                    Toast.makeText(
+                                        context,
+                                        "Se ha agregado la película al carrito",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                },
                                 modifier = Modifier.fillMaxWidth(),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -494,7 +512,7 @@ fun MovieDetail(movie: Movie?) {
                         .fillMaxWidth()
                         .padding(horizontal = 70.dp, vertical = 25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     Text(
                         text = "Ficha técnica",
                         textAlign = TextAlign.Center,
@@ -554,6 +572,8 @@ fun MovieDetail(movie: Movie?) {
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun GameDetail(game: Game?) {
+
+    val context = LocalContext.current
 
     if (game == null) {
         CircularProgressIndicator()
@@ -677,7 +697,13 @@ fun GameDetail(game: Game?) {
                         ) {
 
                             Button(
-                                onClick = {  }, //TODO
+                                onClick = {
+                                    Toast.makeText(
+                                        context,
+                                        "Se ha agregado el juego al carrito",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }, //TODO
                                 modifier = Modifier.fillMaxWidth(),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -719,7 +745,7 @@ fun GameDetail(game: Game?) {
                         .fillMaxWidth()
                         .padding(horizontal = 70.dp, vertical = 25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     Text(
                         text = "Ficha técnica",
                         textAlign = TextAlign.Center,
