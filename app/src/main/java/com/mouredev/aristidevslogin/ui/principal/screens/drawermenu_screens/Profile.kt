@@ -1,4 +1,4 @@
-package com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens
+package com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box

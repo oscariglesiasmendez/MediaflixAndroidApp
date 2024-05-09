@@ -65,11 +65,12 @@ import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.scree
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.MovieScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.ProductDetailScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.ProductScreen
-import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.ProfileScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.ProfileScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.BooksViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.GamesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.MoviesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.CartScreen
 import kotlinx.coroutines.launch
 
 
@@ -153,7 +154,7 @@ fun NavBotSheet() {
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                        navigationController.navigate(ScreenRoutes.MovieScreen.route) {
+                        navigationController.navigate(ScreenRoutes.CartScreen.route) {
                             popUpTo(0) //No se dejan pantallas abiertas en segundo plano
                         }
                     },
@@ -216,7 +217,7 @@ fun NavBotSheet() {
             ) {
                 composable(ScreenRoutes.ProfileScreen.route) { ProfileScreen() }
                 composable(ScreenRoutes.OrdersScreen.route) { ProfileScreen() }
-                composable(ScreenRoutes.CartScreen.route) { ProfileScreen() }
+                composable(ScreenRoutes.CartScreen.route) { CartScreen() }
                 composable(ScreenRoutes.ContactScreen.route) {
                     BookScreen(
                         bookViewModel,

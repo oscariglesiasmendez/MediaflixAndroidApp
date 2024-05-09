@@ -79,6 +79,11 @@ dependencies {
     //implementation "com.google.dagger:hilt-android:2.45"
     //implementation "androidx.hilt:hilt-navigation-compose:1.2.0"
 
+    //Google pay
+    //implementation 'com.google.pay:googlepay:6.2.0'
+
+    implementation 'com.stripe:stripe-android:20.16.1'
+    implementation 'com.stripe:stripe-java:23.0.0'
 
     //Animated Botton Bar
     implementation("com.exyte:animated-navigation-bar:1.0.0")
