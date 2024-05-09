@@ -1,6 +1,5 @@
 package com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mouredev.aristidevslogin.data.ProductsRepository
@@ -14,6 +13,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+
+sealed interface ProductfUiState {
+    data class Success(val volume:Product): ProductfUiState
+    object Loading: ProductfUiState
+    object Error: ProductfUiState
+}
+
 
 class ProductsViewModel(
     private val productsRepository: ProductsRepository

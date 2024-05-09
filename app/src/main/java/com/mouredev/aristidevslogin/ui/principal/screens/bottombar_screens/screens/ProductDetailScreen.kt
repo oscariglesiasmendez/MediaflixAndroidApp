@@ -64,36 +64,34 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun ProductDetailScreen(
-    product: Product?,
+    product: Product,
     bookViewModel: BooksViewModel,
     movieViewModel: MoviesViewModel,
     gameViewModel: GamesViewModel
 ) {
 
-    if (product != null) {
-        when (product.productType) {
-            ProductType.BOOK -> {
-                bookViewModel.loadBook(product.productId!!)
-                val book = bookViewModel.book.collectAsState().value?.data
 
-                BookDetail(book)
-            }
+    when (product.productType) {
+        ProductType.BOOK -> {
+            bookViewModel.loadBook(product.productId!!)
+            val book = bookViewModel.book.collectAsState().value?.data
 
-            ProductType.MOVIE -> {
-                product.productId?.let { movieViewModel.loadMovie(it) }
-                val movie = movieViewModel.movie.collectAsState().value?.data
-
-                MovieDetail(movie)
-            }
-
-            ProductType.GAME -> {
-                product.productId?.let { gameViewModel.loadGame(it) }
-                val game = gameViewModel.game.collectAsState().value?.data
-
-                GameDetail(game)
-            }
+            BookDetail(book)
         }
 
+        ProductType.MOVIE -> {
+            product.productId?.let { movieViewModel.loadMovie(it) }
+            val movie = movieViewModel.movie.collectAsState().value?.data
+
+            MovieDetail(movie)
+        }
+
+        ProductType.GAME -> {
+            product.productId?.let { gameViewModel.loadGame(it) }
+            val game = gameViewModel.game.collectAsState().value?.data
+
+            GameDetail(game)
+        }
     }
 
 

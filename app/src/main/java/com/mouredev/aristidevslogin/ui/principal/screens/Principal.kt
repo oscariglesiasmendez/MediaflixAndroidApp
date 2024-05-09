@@ -37,10 +37,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,6 +63,7 @@ import com.mouredev.aristidevslogin.data.GamesRepositoryImpl
 import com.mouredev.aristidevslogin.data.MoviesRepositoryImpl
 import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
 import com.mouredev.aristidevslogin.data.RetrofitInstance
+import com.mouredev.aristidevslogin.data.model.Product
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.BookScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.GameScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.MovieScreen
@@ -262,15 +266,53 @@ fun NavBotSheet() {
                     )
                 ) { product ->
 
-                    var productId = product.arguments?.getLong("product")
+                    var productId = product.arguments!!.getLong("product")
 
-                    if (productId != null) {
-                        productViewModel.loadProduct(productId)
 
-                        val product = productViewModel.product.collectAsState().value?.data
+                    /*
+                    val productId = remember {  // Use remember to avoid unnecessary recompositions
+                        product.arguments!!.getLong("product")
+                    }
+                     */
+                    productViewModel.loadProduct(productId)
 
+                    val product = productViewModel.product.collectAsState().value?.data
+
+                    if (product != null) {
                         ProductDetailScreen(product, bookViewModel, movieViewModel, gameViewModel)
                     }
+
+                    /*
+                    var product by remember { mutableStateOf<Product?>(null) }
+
+                    // Load product only once
+                    val shouldLoadProduct = remember { mutableStateOf(true) }
+                    if (shouldLoadProduct.value) {
+                        LaunchedEffect(productId) { // Launch effect based on productId change
+                            productViewModel.loadProduct(productId)
+                            shouldLoadProduct.value = false // Prevent further loading
+                        }
+                    }
+
+                    // Observe the product flow
+                    val productState = productViewModel.product.collectAsState().value
+
+                    // Update the product state when available
+                    if (productState?.data != null) {
+                        product = productState.data
+                    }
+
+                    // Display product details or loading/error state
+                    if (product != null) {
+                        ProductDetailScreen(product!!, bookViewModel, movieViewModel, gameViewModel)
+                    } else {
+                        // Handle loading or error state (optional)
+                        // You can display a loading indicator or error message
+                    }
+                    */
+
+
+
                 }
 
             }
@@ -400,232 +442,3 @@ fun NavBarHeader() {
         )
     }
 }
-
-/*
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun BottonBar() {
-    val navigationController = rememberNavController()
-    val selected = remember {
-        mutableStateOf(Icons.Default.List)
-    }
-
-    Scaffold(
-        bottomBar = {
-            BottomAppBar(
-                containerColor = Color.Green
-            ) {
-                IconButton(
-                    onClick = {
-                        selected.value = Icons.Default.List
-                        navigationController.navigate(ScreenRoutes.ProductScreen().name) {
-                            popUpTo(0)
-                        }
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(
-                        Icons.Default.List,
-                        contentDescription = null,
-                        modifier = Modifier.size(26.dp),
-                        tint = if (selected.value == Icons.Default.List) Color.White else Color.DarkGray
-                    )
-                }
-
-
-                IconButton(
-                    onClick = {
-                        selected.value = Icons.Default.Book
-                        navigationController.navigate(ScreenRoutes.BookScreen().name) {
-                            popUpTo(0)
-                        }
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(
-                        Icons.Default.Book,
-                        contentDescription = null,
-                        modifier = Modifier.size(26.dp),
-                        tint = if (selected.value == Icons.Default.List) Color.White else Color.DarkGray
-                    )
-                }
-
-                IconButton(
-                    onClick = {
-                        selected.value = Icons.Default.Movie
-                        navigationController.navigate(ScreenRoutes.MovieScreen().name) {
-                            popUpTo(0)
-                        }
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(
-                        Icons.Default.Movie,
-                        contentDescription = null,
-                        modifier = Modifier.size(26.dp),
-                        tint = if (selected.value == Icons.Default.List) Color.White else Color.DarkGray
-                    )
-                }
-
-                IconButton(
-                    onClick = {
-                        selected.value = Icons.Default.VideogameAsset
-                        navigationController.navigate(ScreenRoutes.GameScreen().name) {
-                            popUpTo(0)
-                        }
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(
-                        Icons.Default.VideogameAsset,
-                        contentDescription = null,
-                        modifier = Modifier.size(26.dp),
-                        tint = if (selected.value == Icons.Default.VideogameAsset) Color.White else Color.DarkGray
-                    )
-                }
-
-            }
-
-
-        }
-    ) {
-
-            paddingValues ->
-        NavHost(
-            navController = navigationController,
-            startDestination = ScreenRoutes.BookScreen().name,
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            //composable(ScreenRoutes.BookScreen().name) { BookScreen(bookViewModel) }
-            //composable(ScreenRoutes.BookScreen().name) { BookScreen(bookViewModel) }
-            composable(ScreenRoutes.MovieScreen().name) { MovieScreen() }
-            composable(ScreenRoutes.MovieScreen().name) { MovieScreen() }
-        }
-
-    }
-
-
-}
-*/
-
-/*
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NavDrawer() {
-    val navigationController = rememberNavController()
-    val coroutineScope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        gesturesEnabled = true,
-        drawerContent = {
-            ModalDrawerSheet {
-                Box(
-                    modifier = Modifier
-                        .background(Color(204, 173, 228))
-                        .fillMaxWidth()
-                        .height(50.dp)
-                ) {
-                    Text(text = "")
-                }
-
-                Divider()
-
-                NavigationDrawerItem(label = { Text(text = "Perfil") }, selected = false,
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Person Icon"
-                        )
-                    },
-                    onClick = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                        navigationController.navigate(ScreenRoutes.ProfileScreen().name) {
-                            popUpTo(0) //No se dejan pantallas abiertas en segundo plano
-                        }
-                    }
-                )
-
-                NavigationDrawerItem(label = { Text(text = "Pedidos") }, selected = false,
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.AddBox,
-                            contentDescription = "Order Icon"
-                        )
-                    },
-                    onClick = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                        navigationController.navigate(ScreenRoutes.ProfileScreen().name) {
-                            popUpTo(0) //No se dejan pantallas abiertas en segundo plano
-                        }
-                    }
-                )
-
-                NavigationDrawerItem(label = { Text(text = "Carrito") }, selected = false,
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = "ShoppingCart Icon"
-                        )
-                    },
-                    onClick = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                        navigationController.navigate(ScreenRoutes.MovieScreen().name) {
-                            popUpTo(0) //No se dejan pantallas abiertas en segundo plano
-                        }
-                    }
-                )
-
-                NavigationDrawerItem(label = { Text(text = "Contacto") }, selected = false,
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.Phone,
-                            contentDescription = "Phone Icon"
-                        )
-                    },
-                    onClick = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                        navigationController.navigate(ScreenRoutes.BookScreen().name) {
-                            popUpTo(0) //No se dejan pantallas abiertas en segundo plano
-                        }
-                    }
-                )
-
-            }
-        },
-
-        ) {
-
-        Scaffold(
-            topBar = {
-                val coroutineScope = rememberCoroutineScope()
-                TopAppBar(title = { Text(text = "Mediaflix") }, navigationIcon = {
-                    IconButton(
-                        onClick = { coroutineScope.launch { drawerState.open() } }
-                    ) {
-                        Icon(Icons.Rounded.Menu, contentDescription = "MenuButton")
-                    }
-                })
-            }
-        ) {
-            NavHost(navController = navigationController, startDestination = ScreenRoutes.ProfileScreen().name) {
-                composable(ScreenRoutes.ProfileScreen().name){ ProfileScreen() }
-                composable(ScreenRoutes.ProfileScreen().name){ ProfileScreen() }
-                composable(ScreenRoutes.MovieScreen().name){ MovieScreen() }
-                composable(ScreenRoutes.BookScreen().name){ BookScreen()}
-            }
-        }
-
-    }
-
-}*/

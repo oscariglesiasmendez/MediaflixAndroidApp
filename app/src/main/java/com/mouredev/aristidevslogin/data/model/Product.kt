@@ -17,3 +17,18 @@ open class Product(
     open val releaseDate: Date,
     open val available: Boolean
 )
+
+val emptyProduct = Product(
+    productId = null,
+    title = "",
+    description = "",
+    stock = 0,
+    language = null,
+    productType = ProductType.BOOK,
+    price = 0.0,
+    rating = null,
+    url = "",
+    genre = "",
+    releaseDate = Date(0),
+    available = false
+)
