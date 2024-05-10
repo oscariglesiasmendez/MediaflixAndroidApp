@@ -1,5 +1,6 @@
 package com.mouredev.aristidevslogin.components
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,8 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.mouredev.aristidevslogin.ScreenRoutes
 import com.mouredev.aristidevslogin.data.model.Product
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.AddToCartEvent
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.ShoppingCartViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -44,7 +48,10 @@ fun ProductCard(
     product: Product,
     modifier: Modifier = Modifier,
     navigationController: NavHostController,
+    viewModel: ShoppingCartViewModel
 ) {
+
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -126,7 +133,13 @@ fun ProductCard(
                     .weight(1f),
             ) {
                 Button(
-                    onClick = { /* Handle button click */ },
+                    onClick = {
+                        val event = AddToCartEvent(product, quantity = 1)
+                        viewModel.onAddToCartEvent(event)
+                        Toast.makeText(
+                            context, "Se ha agregado el producto al carrito", Toast.LENGTH_SHORT
+                        ).show()
+                     },
                     colors = ButtonDefaults.buttonColors(Color(35, 7, 59)),
                 ) {
                     Icon(

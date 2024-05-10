@@ -37,13 +37,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,7 +60,6 @@ import com.mouredev.aristidevslogin.data.GamesRepositoryImpl
 import com.mouredev.aristidevslogin.data.MoviesRepositoryImpl
 import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
 import com.mouredev.aristidevslogin.data.RetrofitInstance
-import com.mouredev.aristidevslogin.data.model.Product
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.BookScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.GameScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.MovieScreen
@@ -74,7 +70,8 @@ import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.Bo
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.GamesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.MoviesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
-import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.CartScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.CartScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.ShoppingCartViewModel
 import kotlinx.coroutines.launch
 
 
@@ -99,6 +96,8 @@ fun NavBotSheet() {
     val bookViewModel = BooksViewModel(BooksRepositoryImpl(RetrofitInstance.api))
     val movieViewModel = MoviesViewModel(MoviesRepositoryImpl(RetrofitInstance.api))
     val gameViewModel = GamesViewModel(GamesRepositoryImpl(RetrofitInstance.api))
+
+    val cartViewModel = remember { ShoppingCartViewModel() }
 
     var badgeCount: Int = 0
 
@@ -221,10 +220,11 @@ fun NavBotSheet() {
             ) {
                 composable(ScreenRoutes.ProfileScreen.route) { ProfileScreen() }
                 composable(ScreenRoutes.OrdersScreen.route) { ProfileScreen() }
-                composable(ScreenRoutes.CartScreen.route) { CartScreen() }
+                composable(ScreenRoutes.CartScreen.route) { CartScreen(cartViewModel) }
                 composable(ScreenRoutes.ContactScreen.route) {
                     BookScreen(
                         bookViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }
@@ -232,6 +232,7 @@ fun NavBotSheet() {
                 composable(ScreenRoutes.ProductScreen.route) {
                     ProductScreen(
                         productViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }
@@ -239,18 +240,21 @@ fun NavBotSheet() {
                 composable(ScreenRoutes.BookScreen.route) {
                     BookScreen(
                         bookViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }
                 composable(ScreenRoutes.MovieScreen.route) {
                     MovieScreen(
                         movieViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }
                 composable(ScreenRoutes.GameScreen.route) {
                     GameScreen(
                         gameViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }

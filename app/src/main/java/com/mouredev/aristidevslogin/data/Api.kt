@@ -59,6 +59,8 @@ interface Api {
     companion object{
         const val BASE_URL = "http://192.168.1.129:8080/api/"
         //const val BASE_URL = "http://192.168.0.16:8080/api/"
+
+        //Usar las llamadas para los que estan disponibles, no tiene sentido enseñar todos
     }
 
 }

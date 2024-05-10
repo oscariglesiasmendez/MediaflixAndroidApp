@@ -22,12 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mouredev.aristidevslogin.components.ProductCard
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.MoviesViewModel
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.ShoppingCartViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MovieScreen(viewModel: MoviesViewModel, navigationController: NavHostController) {
+fun MovieScreen(viewModel: MoviesViewModel, cartViewModel : ShoppingCartViewModel, navigationController: NavHostController) {
 
     val movieList = viewModel.movies.collectAsState().value
     val context = LocalContext.current
@@ -65,12 +66,14 @@ fun MovieScreen(viewModel: MoviesViewModel, navigationController: NavHostControl
                     ProductCard(
                         product = movieList[2 * row],
                         modifier = Modifier.weight(1f),
-                        navigationController = navigationController
+                        navigationController = navigationController,
+                        viewModel = cartViewModel
                     )
                     ProductCard(
                         product = movieList[2 * row + 1],
                         modifier = Modifier.weight(1f),
-                        navigationController = navigationController
+                        navigationController = navigationController,
+                        viewModel = cartViewModel
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))

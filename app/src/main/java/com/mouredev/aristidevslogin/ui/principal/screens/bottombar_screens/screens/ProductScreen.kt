@@ -24,13 +24,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mouredev.aristidevslogin.components.ProductCard
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.ShoppingCartViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("CoroutineCreationDuringComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProductScreen(viewModel: ProductsViewModel, navigationController: NavHostController) {
+fun ProductScreen(viewModel: ProductsViewModel, cartViewModel : ShoppingCartViewModel, navigationController: NavHostController) {
 
     val productList = viewModel.products.collectAsState().value
     val context = LocalContext.current
@@ -68,12 +69,14 @@ fun ProductScreen(viewModel: ProductsViewModel, navigationController: NavHostCon
                     ProductCard(
                         product = productList[2 * row],
                         modifier = Modifier.weight(1f),
-                        navigationController
+                        navigationController,
+                        cartViewModel
                     )
                     ProductCard(
                         product = productList[2 * row + 1],
                         modifier = Modifier.weight(1f),
-                        navigationController
+                        navigationController,
+                        cartViewModel
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
