@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.VideogameAsset
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +38,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -45,12 +48,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mouredev.aristidevslogin.R
@@ -99,7 +104,24 @@ fun NavBotSheet() {
 
     val cartViewModel = remember { ShoppingCartViewModel() }
 
+    val showBottomBar = when (val route = navigationController.currentBackStackEntryAsState().value?.destination?.route) {
+        null -> true // Handle null case
+        else -> {
+            route.startsWith(ScreenRoutes.ProductDetailScreen.route) ||
+                    route in routesToHideBars.map { it.route }
+        }
+    }
+    // https://developer.android.com/jetpack/compose/navigation
+
     var badgeCount: Int = 0
+
+    val shoppingCartViewModel = remember { ShoppingCartViewModel() }
+
+    LaunchedEffect(Unit) {
+        shoppingCartViewModel.totalItemsInCart.collect { totalItems ->
+            badgeCount = totalItems
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -172,7 +194,8 @@ fun NavBotSheet() {
                                 Text(
                                     text = badgeCount.toString(),
                                     color = Color.White,
-                                    fontSize = 10.sp
+                                    fontSize = 10.sp,
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
@@ -203,15 +226,21 @@ fun NavBotSheet() {
 
         Scaffold(
             topBar = {
-                val coroutineScope = rememberCoroutineScope()
-                TopAppBar(title = { Text(text = "Mediaflix") }, navigationIcon = {
-                    IconButton(
-                        onClick = { coroutineScope.launch { drawerState.open() } }
-                    ) {
-                        Icon(Icons.Rounded.Menu, contentDescription = "MenuButton")
-                    }
-                })
-            }, bottomBar = { BottomBar(navigationController) }
+                if (!showBottomBar) {
+                    val coroutineScope = rememberCoroutineScope()
+                    TopAppBar(title = { Text(text = "Mediaflix") }, navigationIcon = {
+                        IconButton(
+                            onClick = { coroutineScope.launch { drawerState.open() } }
+                        ) {
+                            Icon(Icons.Rounded.Menu, contentDescription = "MenuButton")
+                        }
+                    })
+                }
+            }, bottomBar = {
+                if (!showBottomBar) {
+                    BottomBar(navigationController)
+                }
+            }
 
         ) {
             NavHost(
@@ -270,20 +299,19 @@ fun NavBotSheet() {
                     )
                 ) { product ->
 
-                    var productId = product.arguments!!.getLong("product")
+                    val productId by remember { mutableStateOf(product.arguments!!.getLong("product")) }
 
-
-                    /*
-                    val productId = remember {  // Use remember to avoid unnecessary recompositions
-                        product.arguments!!.getLong("product")
+                    LaunchedEffect(key1 = productId) {
+                        productViewModel.loadProduct(productId)
                     }
-                     */
-                    productViewModel.loadProduct(productId)
 
-                    val product = productViewModel.product.collectAsState().value?.data
+                    val productState = productViewModel.product.collectAsState().value
 
-                    if (product != null) {
+                    if (productState?.data != null) {
+                        val product = productState.data
                         ProductDetailScreen(product, bookViewModel, movieViewModel, gameViewModel)
+                    } else {
+                        CircularProgressIndicator()
                     }
 
                     /*
@@ -316,7 +344,6 @@ fun NavBotSheet() {
                     */
 
 
-
                 }
 
             }
@@ -327,6 +354,14 @@ fun NavBotSheet() {
 
 
 }
+
+//Función para elegir en que rutas no se mostrarán ni la top bar ni la bottom bar
+val routesToHideBars = listOf(
+    ScreenRoutes.ProfileScreen,
+    ScreenRoutes.OrdersScreen,
+    ScreenRoutes.CartScreen,
+    ScreenRoutes.ProductDetailScreen,
+)
 
 
 @Composable

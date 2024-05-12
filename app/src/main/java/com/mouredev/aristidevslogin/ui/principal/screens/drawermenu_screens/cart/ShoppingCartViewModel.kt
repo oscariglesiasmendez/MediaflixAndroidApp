@@ -15,6 +15,8 @@ class ShoppingCartViewModel : ViewModel() {
 
     val cartItemsFlow: Flow<List<Product>> = _shoppingCartState.map { it.cartItems } // Read-only flow of cart items
 
+    val totalItemsInCart: Flow<Int> = cartItemsFlow.map { it.size }
+
     fun addProductToCart(product: Product, quantity: Int = 1) {
         if (!product.available) {
             // Handle unavailable product (e.g., Toast message)
