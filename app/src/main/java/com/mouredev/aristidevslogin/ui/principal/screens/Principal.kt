@@ -75,6 +75,7 @@ import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.Bo
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.GamesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.MoviesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.ContactScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.CartScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.ShoppingCartViewModel
 import kotlinx.coroutines.launch
@@ -104,7 +105,8 @@ fun NavBotSheet() {
 
     val cartViewModel = remember { ShoppingCartViewModel() }
 
-    val showBottomBar = when (val route = navigationController.currentBackStackEntryAsState().value?.destination?.route) {
+    val showBottomBar = when (val route =
+        navigationController.currentBackStackEntryAsState().value?.destination?.route) {
         null -> true // Handle null case
         else -> {
             route.startsWith(ScreenRoutes.ProductDetailScreen.route) ||
@@ -213,7 +215,7 @@ fun NavBotSheet() {
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                        navigationController.navigate(ScreenRoutes.BookScreen.route) {
+                        navigationController.navigate(ScreenRoutes.ContactScreen.route) {
                             popUpTo(0) //No se dejan pantallas abiertas en segundo plano
                         }
                     }
@@ -250,13 +252,7 @@ fun NavBotSheet() {
                 composable(ScreenRoutes.ProfileScreen.route) { ProfileScreen() }
                 composable(ScreenRoutes.OrdersScreen.route) { ProfileScreen() }
                 composable(ScreenRoutes.CartScreen.route) { CartScreen(cartViewModel) }
-                composable(ScreenRoutes.ContactScreen.route) {
-                    BookScreen(
-                        bookViewModel,
-                        cartViewModel,
-                        navigationController
-                    )
-                }
+                composable(ScreenRoutes.ContactScreen.route) { ContactScreen() }
 
                 composable(ScreenRoutes.ProductScreen.route) {
                     ProductScreen(
@@ -360,7 +356,7 @@ val routesToHideBars = listOf(
     ScreenRoutes.ProfileScreen,
     ScreenRoutes.OrdersScreen,
     ScreenRoutes.CartScreen,
-    ScreenRoutes.ProductDetailScreen,
+    //ScreenRoutes.ProductDetailScreen,
 )
 
 
