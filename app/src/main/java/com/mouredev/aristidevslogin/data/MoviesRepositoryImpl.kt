@@ -1,6 +1,5 @@
 package com.mouredev.aristidevslogin.data
 
-import com.mouredev.aristidevslogin.data.model.Book
 import com.mouredev.aristidevslogin.data.model.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -1,8 +1,6 @@
 package com.mouredev.aristidevslogin.validations
 
 import android.util.Patterns
-import androidx.compose.ui.res.stringResource
-import com.mouredev.aristidevslogin.R
 
 class ValidateEmail {
 

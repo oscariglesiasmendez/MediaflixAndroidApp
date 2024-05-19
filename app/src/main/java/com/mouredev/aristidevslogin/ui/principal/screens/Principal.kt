@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.VideogameAsset
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,17 +44,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mouredev.aristidevslogin.R
@@ -63,7 +65,6 @@ import com.mouredev.aristidevslogin.data.GamesRepositoryImpl
 import com.mouredev.aristidevslogin.data.MoviesRepositoryImpl
 import com.mouredev.aristidevslogin.data.ProductsRepositoryImpl
 import com.mouredev.aristidevslogin.data.RetrofitInstance
-import com.mouredev.aristidevslogin.data.model.Product
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.BookScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.GameScreen
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.screens.MovieScreen
@@ -74,7 +75,9 @@ import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.Bo
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.GamesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.MoviesViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.bottombar_screens.ui.ProductsViewModel
-import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.CartScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.ContactScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.CartScreen
+import com.mouredev.aristidevslogin.ui.principal.screens.drawermenu_screens.cart.ShoppingCartViewModel
 import kotlinx.coroutines.launch
 
 
@@ -100,7 +103,27 @@ fun NavBotSheet() {
     val movieViewModel = MoviesViewModel(MoviesRepositoryImpl(RetrofitInstance.api))
     val gameViewModel = GamesViewModel(GamesRepositoryImpl(RetrofitInstance.api))
 
+    val cartViewModel = remember { ShoppingCartViewModel() }
+
+    val showBottomBar = when (val route =
+        navigationController.currentBackStackEntryAsState().value?.destination?.route) {
+        null -> true // Handle null case
+        else -> {
+            route.startsWith(ScreenRoutes.ProductDetailScreen.route) ||
+                    route in routesToHideBars.map { it.route }
+        }
+    }
+    // https://developer.android.com/jetpack/compose/navigation
+
     var badgeCount: Int = 0
+
+    val shoppingCartViewModel = remember { ShoppingCartViewModel() }
+
+    LaunchedEffect(Unit) {
+        shoppingCartViewModel.totalItemsInCart.collect { totalItems ->
+            badgeCount = totalItems
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -173,7 +196,8 @@ fun NavBotSheet() {
                                 Text(
                                     text = badgeCount.toString(),
                                     color = Color.White,
-                                    fontSize = 10.sp
+                                    fontSize = 10.sp,
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
@@ -191,7 +215,7 @@ fun NavBotSheet() {
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                        navigationController.navigate(ScreenRoutes.BookScreen.route) {
+                        navigationController.navigate(ScreenRoutes.ContactScreen.route) {
                             popUpTo(0) //No se dejan pantallas abiertas en segundo plano
                         }
                     }
@@ -204,15 +228,21 @@ fun NavBotSheet() {
 
         Scaffold(
             topBar = {
-                val coroutineScope = rememberCoroutineScope()
-                TopAppBar(title = { Text(text = "Mediaflix") }, navigationIcon = {
-                    IconButton(
-                        onClick = { coroutineScope.launch { drawerState.open() } }
-                    ) {
-                        Icon(Icons.Rounded.Menu, contentDescription = "MenuButton")
-                    }
-                })
-            }, bottomBar = { BottomBar(navigationController) }
+                if (!showBottomBar) {
+                    val coroutineScope = rememberCoroutineScope()
+                    TopAppBar(title = { Text(text = "Mediaflix") }, navigationIcon = {
+                        IconButton(
+                            onClick = { coroutineScope.launch { drawerState.open() } }
+                        ) {
+                            Icon(Icons.Rounded.Menu, contentDescription = "MenuButton")
+                        }
+                    })
+                }
+            }, bottomBar = {
+                if (!showBottomBar) {
+                    BottomBar(navigationController)
+                }
+            }
 
         ) {
             NavHost(
@@ -221,17 +251,13 @@ fun NavBotSheet() {
             ) {
                 composable(ScreenRoutes.ProfileScreen.route) { ProfileScreen() }
                 composable(ScreenRoutes.OrdersScreen.route) { ProfileScreen() }
-                composable(ScreenRoutes.CartScreen.route) { CartScreen() }
-                composable(ScreenRoutes.ContactScreen.route) {
-                    BookScreen(
-                        bookViewModel,
-                        navigationController
-                    )
-                }
+                composable(ScreenRoutes.CartScreen.route) { CartScreen(cartViewModel) }
+                composable(ScreenRoutes.ContactScreen.route) { ContactScreen() }
 
                 composable(ScreenRoutes.ProductScreen.route) {
                     ProductScreen(
                         productViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }
@@ -239,18 +265,21 @@ fun NavBotSheet() {
                 composable(ScreenRoutes.BookScreen.route) {
                     BookScreen(
                         bookViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }
                 composable(ScreenRoutes.MovieScreen.route) {
                     MovieScreen(
                         movieViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }
                 composable(ScreenRoutes.GameScreen.route) {
                     GameScreen(
                         gameViewModel,
+                        cartViewModel,
                         navigationController
                     )
                 }
@@ -266,20 +295,19 @@ fun NavBotSheet() {
                     )
                 ) { product ->
 
-                    var productId = product.arguments!!.getLong("product")
+                    val productId by remember { mutableStateOf(product.arguments!!.getLong("product")) }
 
-
-                    /*
-                    val productId = remember {  // Use remember to avoid unnecessary recompositions
-                        product.arguments!!.getLong("product")
+                    LaunchedEffect(key1 = productId) {
+                        productViewModel.loadProduct(productId)
                     }
-                     */
-                    productViewModel.loadProduct(productId)
 
-                    val product = productViewModel.product.collectAsState().value?.data
+                    val productState = productViewModel.product.collectAsState().value
 
-                    if (product != null) {
+                    if (productState?.data != null) {
+                        val product = productState.data
                         ProductDetailScreen(product, bookViewModel, movieViewModel, gameViewModel)
+                    } else {
+                        CircularProgressIndicator()
                     }
 
                     /*
@@ -312,7 +340,6 @@ fun NavBotSheet() {
                     */
 
 
-
                 }
 
             }
@@ -323,6 +350,14 @@ fun NavBotSheet() {
 
 
 }
+
+//Función para elegir en que rutas no se mostrarán ni la top bar ni la bottom bar
+val routesToHideBars = listOf(
+    ScreenRoutes.ProfileScreen,
+    ScreenRoutes.OrdersScreen,
+    ScreenRoutes.CartScreen,
+    //ScreenRoutes.ProductDetailScreen,
+)
 
 
 @Composable

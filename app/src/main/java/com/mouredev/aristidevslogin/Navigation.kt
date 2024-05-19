@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.google.firebase.auth.FirebaseAuth
 import com.mouredev.aristidevslogin.ui.login.screen.LoginScreen
 import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
 import com.mouredev.aristidevslogin.ui.principal.screens.PrincipalScreen
@@ -27,7 +28,11 @@ fun Navigation(navHostController: NavHostController) {
 
         navigation(startDestination = ScreenRoutes.WelcomeScreen.route, route = "welcome_flow") {
             composable(route = ScreenRoutes.WelcomeScreen.route) {
-                WelcomeScreen(navController = navHostController)
+                if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
+                    WelcomeScreen(navController = navHostController)
+                }else{
+                    PrincipalScreen()
+                }
             }
 
             composable(route = ScreenRoutes.LoginScreen.route) {

@@ -98,6 +98,7 @@ fun SignUpScreen(
 
 
                 item {
+
                     // FirstName
                     CTextField(
                         hint = "Nombre",
@@ -122,6 +123,7 @@ fun SignUpScreen(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
+
                     // Email
                     CTextField(
                         hint = "Email",
@@ -145,7 +147,7 @@ fun SignUpScreen(
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
-
+/*
                     // Repeat Password
                     CPasswordTextField(
                         hint = "Confirmar contraseña",
@@ -161,12 +163,18 @@ fun SignUpScreen(
                         passwordVisible = passwordVisible,
                         passwordVisibleChange = { passwordVisible = !passwordVisible },
                     )
+*/
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     // Botón registro
                     CButton(
-                        onSignUpClick,
+                        onClick = {
+                            viewModel.createUserWithEmailAndPassword(viewModel.state.email,viewModel.state.password,viewModel.state.firstName, viewModel.state.lastName){
+                                onSignUpClick()
+                            }
+
+                            },
                         text = "Registrarse"
                     )
                 }
@@ -190,7 +198,7 @@ fun SignUpScreen(
                                 fontWeight = FontWeight(800),
                                 color = Color.White
                             ),
-                            modifier = Modifier.clickable { onLoginClick }
+                            modifier = Modifier.clickable { onLoginClick() }
 
                         )
                     }

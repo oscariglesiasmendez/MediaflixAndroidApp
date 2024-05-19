@@ -1,7 +1,6 @@
 package com.mouredev.aristidevslogin.data
 
 import com.mouredev.aristidevslogin.data.model.Book
-import com.mouredev.aristidevslogin.data.model.Product
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException

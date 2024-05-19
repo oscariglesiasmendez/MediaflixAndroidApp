@@ -10,18 +10,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ImageNotSupported
 import androidx.compose.material3.Button
@@ -31,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +44,6 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
-import com.mouredev.aristidevslogin.components.CButton
 import com.mouredev.aristidevslogin.components.ExpandableText
 import com.mouredev.aristidevslogin.components.HyperlinkText
 import com.mouredev.aristidevslogin.components.RatingBar
@@ -70,31 +66,44 @@ fun ProductDetailScreen(
     gameViewModel: GamesViewModel
 ) {
 
+    val productId = product.productId!!
 
-    when (product.productType) {
-        ProductType.BOOK -> {
-            bookViewModel.loadBook(product.productId!!)
-            val book = bookViewModel.book.collectAsState().value?.data
-
-            BookDetail(book)
-        }
-
-        ProductType.MOVIE -> {
-            product.productId?.let { movieViewModel.loadMovie(it) }
-            val movie = movieViewModel.movie.collectAsState().value?.data
-
-            MovieDetail(movie)
-        }
-
-        ProductType.GAME -> {
-            product.productId?.let { gameViewModel.loadGame(it) }
-            val game = gameViewModel.game.collectAsState().value?.data
-
-            GameDetail(game)
+    //Tuve que hacer esto porque si no con el recompose se llamaba como en bucle a la api
+    LaunchedEffect(key1 = productId) {
+        when (product.productType) {
+            ProductType.BOOK -> bookViewModel.loadBook(productId)
+            ProductType.MOVIE -> movieViewModel.loadMovie(productId)
+            ProductType.GAME -> gameViewModel.loadGame(productId)
         }
     }
 
+    val bookState = bookViewModel.book.collectAsState().value
+    val movieState = movieViewModel.movie.collectAsState().value
+    val gameState = gameViewModel.game.collectAsState().value
 
+    when (product.productType) {
+        ProductType.BOOK -> {
+            if (bookState?.data != null) {
+                BookDetail(bookState.data)
+            } else {
+                CircularProgressIndicator()
+            }
+        }
+        ProductType.MOVIE -> {
+            if (movieState?.data != null) {
+                MovieDetail(movieState.data)
+            } else {
+                CircularProgressIndicator()
+            }
+        }
+        ProductType.GAME -> {
+            if (gameState?.data != null) {
+                GameDetail(gameState.data)
+            } else {
+                CircularProgressIndicator()
+            }
+        }
+    }
 }
 
 

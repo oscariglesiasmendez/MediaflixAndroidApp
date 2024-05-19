@@ -19,7 +19,7 @@ fun DontHaveAccountRow(
     onSignupTap: () -> Unit = {},
 ) {
     Row(
-        modifier = Modifier.padding(top=12.dp, bottom = 52.dp)
+        modifier = Modifier.padding(top=12.dp)
     ){
         Text("Todavía no tienes cuenta? ",
             style = TextStyle(
@@ -34,7 +34,7 @@ fun DontHaveAccountRow(
                 fontSize = 18.sp,
                 fontFamily = AlegreyaSansFontFamily,
                 fontWeight = FontWeight(800),
-                color = Color.White
+                color = Color(35, 7, 59)
             ),
             modifier = Modifier.clickable {
                 onSignupTap()

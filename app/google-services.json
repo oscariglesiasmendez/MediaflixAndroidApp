@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "345794833085",
+    "project_id": "mediaflix-10311",
+    "storage_bucket": "mediaflix-10311.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345794833085:android:0da3b3614ebd4fb219e5d4",
+        "android_client_info": {
+          "package_name": "com.mouredev.aristidevslogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345794833085-dqq27ea59kndq84uh0l7vkmumju2evgp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mouredev.aristidevslogin",
+            "certificate_hash": "4fc69f01bce27fd44772843d2387b692646ddb2f"
+          }
+        },
+        {
+          "client_id": "345794833085-h4bpo55kna5rs44epnvdb5o7kg5gouh6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUwQjWD0smZyrSFkeUtnO8PkgjoBfb9Jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345794833085-h4bpo55kna5rs44epnvdb5o7kg5gouh6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

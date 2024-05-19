@@ -1,7 +1,5 @@
 package com.mouredev.aristidevslogin
 
-import com.mouredev.aristidevslogin.data.model.Product
-
 
 sealed class ScreenRoutes(val route:String) {
     object WelcomeScreen : ScreenRoutes("Welcome")

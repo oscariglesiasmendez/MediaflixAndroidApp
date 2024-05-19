@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.mouredev.aristidevslogin.data.MoviesRepository
 import com.mouredev.aristidevslogin.data.Result
 import com.mouredev.aristidevslogin.data.model.Movie
-import com.mouredev.aristidevslogin.data.model.Product
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
