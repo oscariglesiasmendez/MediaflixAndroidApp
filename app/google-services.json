@@ -1,0 +1,130 @@
+{
+  "project_info": {
+    "project_number": "345794833085",
+    "project_id": "mediaflix-10311",
+    "storage_bucket": "mediaflix-10311.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345794833085:android:e63580409947585919e5d4",
+        "android_client_info": {
+          "package_name": "com.mouredev.aristidevs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345794833085-43t66glk9kvfv23h36to0ila27iasqrr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mouredev.aristidevs",
+            "certificate_hash": "92d81fcc276e0483afcf50b636347cdbd3a5d3a3"
+          }
+        },
+        {
+          "client_id": "345794833085-jctt6r762u48eikebneda83te5oh50iq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mouredev.aristidevs",
+            "certificate_hash": "a787fc14c5ad80a4528614ea9deac35b804dfa42"
+          }
+        },
+        {
+          "client_id": "345794833085-tt6hbkfmetmknvmo1ain0nrik0hbgl6n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mouredev.aristidevs",
+            "certificate_hash": "83de0e17cbfedc56b414f5693d0aaa737db4cd11"
+          }
+        },
+        {
+          "client_id": "345794833085-408nrm6rsh9ai0r2sfofsvgd3k1lkc05.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrOC55JwQ7W542AKwxu5NEm1KIml0Y9-o"
+        },
+        {
+          "current_key": "AIzaSyCUwQjWD0smZyrSFkeUtnO8PkgjoBfb9Jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345794833085-408nrm6rsh9ai0r2sfofsvgd3k1lkc05.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345794833085:android:0da3b3614ebd4fb219e5d4",
+        "android_client_info": {
+          "package_name": "com.mouredev.aristidevslogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345794833085-53l9ov8q3js3sp27vf7f1et2f1obivnh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mouredev.aristidevslogin",
+            "certificate_hash": "83de0e17cbfedc56b414f5693d0aaa737db4cd11"
+          }
+        },
+        {
+          "client_id": "345794833085-dqq27ea59kndq84uh0l7vkmumju2evgp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mouredev.aristidevslogin",
+            "certificate_hash": "4fc69f01bce27fd44772843d2387b692646ddb2f"
+          }
+        },
+        {
+          "client_id": "345794833085-g7dk2420bs2beljjn3dfr1otkaqo3kjj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mouredev.aristidevslogin",
+            "certificate_hash": "a787fc14c5ad80a4528614ea9deac35b804dfa42"
+          }
+        },
+        {
+          "client_id": "345794833085-pie645tbt152aap585dmq9p2ru8q7753.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mouredev.aristidevslogin",
+            "certificate_hash": "92d81fcc276e0483afcf50b636347cdbd3a5d3a3"
+          }
+        },
+        {
+          "client_id": "345794833085-408nrm6rsh9ai0r2sfofsvgd3k1lkc05.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrOC55JwQ7W542AKwxu5NEm1KIml0Y9-o"
+        },
+        {
+          "current_key": "AIzaSyCUwQjWD0smZyrSFkeUtnO8PkgjoBfb9Jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345794833085-408nrm6rsh9ai0r2sfofsvgd3k1lkc05.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

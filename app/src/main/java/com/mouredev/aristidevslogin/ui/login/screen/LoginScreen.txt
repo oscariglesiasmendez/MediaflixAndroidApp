@@ -1,0 +1,138 @@
+package com.mouredev.aristidevslogin.ui.login.screen
+
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.mouredev.aristidevslogin.ui.theme.AlegreyaFontFamily
+import com.mouredev.aristidevslogin.ui.theme.AlegreyaSansFontFamily
+import com.mouredev.aristidevslogin.components.CButton
+import com.mouredev.aristidevslogin.components.CPasswordTextField
+import com.mouredev.aristidevslogin.components.CTextField
+import com.mouredev.aristidevslogin.components.DontHaveAccountRow
+import com.mouredev.aristidevslogin.ui.login.ui.LoginViewModel
+import com.mouredev.aristidevslogin.ui.login.ui.LoginFormEvent
+import com.mouredev.aristidevslogin.R
+
+@Composable
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onLoginClick: () -> Unit,
+    onSignUpClick: () -> Unit
+) {
+
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    Surface(
+        color = Color(204, 173, 228),
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp)
+            ) {
+
+                // Logo
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 54.dp)
+                        .height(100.dp)
+                        .align(Alignment.Start)
+                        .offset(x = (-20).dp),
+                )
+
+                Text(
+                    text = "Iniciar Sesión",
+                    style = TextStyle(
+                        fontSize = 28.sp,
+                        fontFamily = AlegreyaFontFamily,
+                        fontWeight = FontWeight(500),
+                        color = Color.White
+                    ),
+                    modifier = Modifier.align(Alignment.Start)
+                )
+
+                Text(
+                    "Inicia sesión para acceder a todo el contenido disponible",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontFamily = AlegreyaSansFontFamily,
+                        color = Color(0xB2FFFFFF)
+                    ),
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = 24.dp)
+                )
+
+                // Email
+                CTextField(
+                    hint = "Dirección de correo electrónico",
+                    onValueChange = {
+                        viewModel.onEvent(LoginFormEvent.EmailChanged(it))
+                    },
+                    value = viewModel.state.email,
+                    errorMessage = viewModel.state.emailError
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Password
+                CPasswordTextField(
+                    hint = "Contraseña",
+                    value = viewModel.state.password,
+                    onValueChange = { viewModel.onEvent(LoginFormEvent.PasswordChanged(it)) },
+                    errorMessage = viewModel.state.passwordError,
+                    passwordVisible = passwordVisible,
+                    passwordVisibleChange = { passwordVisible = !passwordVisible },
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Botón login
+                CButton(
+                    onClick = {
+                        // Trigger LoginFormEvent.Submit first
+                        viewModel.onEvent(LoginFormEvent.Submit)
+
+                        // Sólo si los datos son válidos avanzo a la siguiente pantalla
+                        if(viewModel.submitData()) {
+                            // Then trigger onLoginClick
+                            onLoginClick()
+                        }
+                    },
+                    text = "Iniciar Sesión"
+                )
+
+                DontHaveAccountRow(onSignUpClick)
+            }
+        }
+    }
+}
+
+
+
+
+
